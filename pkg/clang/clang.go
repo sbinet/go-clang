@@ -51,7 +51,7 @@ type Index struct {
  * -include-pch) allows 'excludeDeclsFromPCH' to remove redundant callbacks
  * (which gives the indexer the same performance benefit as the compiler).
  */
-func CreateIndex(excludeDeclarationsFromPCH, displayDiagnostics int) Index {
+func NewIndex(excludeDeclarationsFromPCH, displayDiagnostics int) Index {
 	idx := C.clang_createIndex(C.int(excludeDeclarationsFromPCH),
 		C.int(displayDiagnostics))
 	return Index{idx}
@@ -72,7 +72,7 @@ type TranslationUnit struct {
 	c C.CXTranslationUnit
 }
 
-func (tu TranslationUnit) GetFile(file_name string) File {
+func (tu TranslationUnit) File(file_name string) File {
 	cfname := C.CString(file_name)
 	defer C.free(unsafe.Pointer(cfname))
 	f := C.clang_getFile(tu.c, cfname)
@@ -98,7 +98,7 @@ func (tu TranslationUnit) IsFileMultipleIncludeGuarded(file File) bool {
  * The translation unit cursor can be used to start traversing the
  * various declarations within the given translation unit.
  */
-func (tu TranslationUnit) GetCursor() Cursor {
+func (tu TranslationUnit) ToCursor() Cursor {
 	o := C.clang_getTranslationUnitCursor(tu.c)
 	return Cursor{o}
 }
@@ -165,7 +165,7 @@ type SourceRange struct {
 /**
  * \brief Retrieve a NULL (invalid) source location.
  */
-func GetNullLocation() SourceLocation {
+func NewNullLocation() SourceLocation {
 	return SourceLocation{C.clang_getNullLocation()}
 }
 
@@ -189,7 +189,7 @@ func EqualLocations(loc1, loc2 SourceLocation) bool {
  * \brief Retrieves the source location associated with a given file/line/column
  * in a particular translation unit.
  */
-func (tu TranslationUnit) GetLocation(f File, line, column uint) SourceLocation {
+func (tu TranslationUnit) Location(f File, line, column uint) SourceLocation {
 	loc := C.clang_getLocation(tu.c, f.c, C.uint(line), C.uint(column))
 	return SourceLocation{loc}
 }
@@ -198,7 +198,7 @@ func (tu TranslationUnit) GetLocation(f File, line, column uint) SourceLocation 
  * \brief Retrieves the source location associated with a given character offset
  * in a particular translation unit.
  */
-func (tu TranslationUnit) GetLocationForOffset(f File, offset uint) SourceLocation {
+func (tu TranslationUnit) LocationForOffset(f File, offset uint) SourceLocation {
 	loc := C.clang_getLocationForOffset(tu.c, f.c, C.uint(offset))
 	return SourceLocation{loc}
 }
@@ -206,7 +206,7 @@ func (tu TranslationUnit) GetLocationForOffset(f File, offset uint) SourceLocati
 /**
  * \brief Retrieve a NULL (invalid) source range.
  */
-func GetNullRange() SourceRange {
+func NewNullRange() SourceRange {
 	return SourceRange{C.clang_getNullRange()}
 }
 
@@ -214,7 +214,7 @@ func GetNullRange() SourceRange {
  * \brief Retrieve a source range given the beginning and ending source
  * locations.
  */
-func GetRange(beg, end SourceLocation) SourceRange {
+func NewRange(beg, end SourceLocation) SourceRange {
 	o := C.clang_getRange(beg.c, end.c)
 	return SourceRange{o}
 }

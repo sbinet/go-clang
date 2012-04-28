@@ -56,7 +56,7 @@ type Cursor struct {
 }
 
 // Retrieve the NULL cursor, which represents no entity.
-func GetNullCursor() Cursor {
+func NewNullCursor() Cursor {
 	return Cursor{C.clang_getNullCursor()}
 }
 
