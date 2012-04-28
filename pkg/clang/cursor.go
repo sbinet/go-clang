@@ -475,4 +475,14 @@ func (c Cursor) Type() Type {
 	return Type{o}
 }
 
+/**
+ * \brief Retrieve the result type associated with a given cursor.  This only
+ *  returns a valid type of the cursor refers to a function or method.
+ */
+func (c Cursor) ResultType() Type {
+	o := C.clang_getCursorResultType(c.c)
+	return Type{o}
+}
+
+
 // EOF
