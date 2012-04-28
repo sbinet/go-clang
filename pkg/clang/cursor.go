@@ -484,5 +484,106 @@ func (c Cursor) ResultType() Type {
 	return Type{o}
 }
 
+/**
+ * \brief Returns 1 if the base class specified by the cursor with kind
+ *   CX_CXXBaseSpecifier is virtual.
+ */
+func (c Cursor) IsVirtualBase() bool {
+	o := C.clang_isVirtualBase(c.c)
+	return o == C.uint(1)
+}
+
+/**
+ * \brief Represents the C++ access control level to a base class for a
+ * cursor with kind CX_CXXBaseSpecifier.
+ */
+type AccessSpecifier uint32
+const (
+	AS_Invalid AccessSpecifier = C.CX_CXXInvalidAccessSpecifier
+	AS_Public = C.CX_CXXPublic
+	AS_Protected = C.CX_CXXProtected
+	AS_Private = C.CX_CXXPrivate
+)
+
+/**
+ * \brief Returns the access control level for the C++ base specifier
+ * represented by a cursor with kind CXCursor_CXXBaseSpecifier or
+ * CXCursor_AccessSpecifier.
+ */
+func (c Cursor) AccessSpecifier() AccessSpecifier {
+	o := C.clang_getCXXAccessSpecifier(c.c)
+	return AccessSpecifier(o)
+}
+
+/**
+ * \brief Determine the number of overloaded declarations referenced by a 
+ * \c CXCursor_OverloadedDeclRef cursor.
+ *
+ * \param cursor The cursor whose overloaded declarations are being queried.
+ *
+ * \returns The number of overloaded declarations referenced by \c cursor. If it
+ * is not a \c CXCursor_OverloadedDeclRef cursor, returns 0.
+ */
+func (c Cursor) NumOverloadedDecls() int {
+	o := C.clang_getNumOverloadedDecls(c.c)
+	return int(o)
+}
+
+/**
+ * \brief Retrieve a cursor for one of the overloaded declarations referenced
+ * by a \c CXCursor_OverloadedDeclRef cursor.
+ *
+ * \param cursor The cursor whose overloaded declarations are being queried.
+ *
+ * \param index The zero-based index into the set of overloaded declarations in
+ * the cursor.
+ *
+ * \returns A cursor representing the declaration referenced by the given 
+ * \c cursor at the specified \c index. If the cursor does not have an 
+ * associated set of overloaded declarations, or if the index is out of bounds,
+ * returns \c clang_getNullCursor();
+ */
+func (c Cursor) OverloadedDecl(i int) Cursor {
+	o := C.clang_getOverloadedDecl(c.c, C.uint(i))
+	return Cursor{o}
+}
+
+/**
+ * \brief For cursors representing an iboutletcollection attribute,
+ *  this function returns the collection element type.
+ *
+ */
+func (c Cursor) IBOutletCollectionType() Type {
+	o := C.clang_getIBOutletCollectionType(c.c)
+	return Type{o}
+}
+
+/**
+ * \brief Describes how the traversal of the children of a particular
+ * cursor should proceed after visiting a particular child cursor.
+ *
+ * A value of this enumeration type should be returned by each
+ * \c CXCursorVisitor to indicate how clang_visitChildren() proceed.
+ */
+type ChildVisitResult uint32
+
+const (
+	/**
+	 * \brief Terminates the cursor traversal.
+	 */
+	CVR_Break ChildVisitResult = C.CXChildVisit_Break
+
+	/**
+	 * \brief Continues the cursor traversal with the next sibling of
+	 * the cursor just visited, without visiting its children.
+	 */
+	CVR_Continue = C.CXChildVisit_Continue
+
+	/**
+	 * \brief Recursively traverse the children of this cursor, using
+	 * the same visitor and client data.
+	 */
+	CVR_Recurse = C.CXChildVisit_Recurse
+)
 
 // EOF
