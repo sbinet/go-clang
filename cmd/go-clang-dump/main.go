@@ -64,7 +64,7 @@ func main() {
 		return clang.CVR_Continue
 	}
 
-	cursor.Visit((clang.CursorVisitor) (fct))
+	cursor.Visit(fct)
 
 	fmt.Printf(":: bye.\n")
 }

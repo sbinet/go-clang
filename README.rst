@@ -45,3 +45,4 @@ Documentation
 Is provided thru ``gopkg``:
 
  http://gopkgdoc.appspot.com/pkg/bitbucket.org/binet/go-clang/pkg/clang
+
