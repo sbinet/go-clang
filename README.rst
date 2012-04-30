@@ -23,7 +23,11 @@ Example
 An example on how to use the AST visitor of ``CLang`` is provided
 here:
 
- 
+ https://bitbucket.org/binet/go-clang/src/tip/cmd/go-clang-dump/main.go
+
+which can be installed like so::
+
+  $ go get bitbucket.org/binet/go-clang/cmd/go-clang-dump
 
 Limitations
 -----------
