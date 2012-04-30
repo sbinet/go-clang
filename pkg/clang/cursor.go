@@ -51,6 +51,26 @@ func EqualCursors(c1, c2 Cursor) bool {
 	return false
 }
 
+// Spelling returns the name of the entity referenced by this cursor.
+func (c Cursor) Spelling() string {
+	cstr := cxstring{C.clang_getCursorSpelling(c.c)}
+	defer cstr.Dispose()
+	return cstr.String()
+}
+
+/**
+ * \brief Retrieve the display name for the entity referenced by this cursor.
+ *
+ * The display name contains extra information that helps identify the cursor,
+ * such as the parameters of a function or template or the arguments of a 
+ * class template specialization.
+ */
+func (c Cursor) DisplayName() string {
+	cstr := cxstring{C.clang_getCursorDisplayName(c.c)}
+	defer cstr.Dispose()
+	return cstr.String()
+}
+
 // IsNull returns true if the underlying Cursor is null
 func (c Cursor) IsNull() bool {
 	o := C.clang_Cursor_isNull(c.c)
@@ -666,5 +686,117 @@ func (c Cursor) USR() string {
 //  */
 // CINDEX_LINKAGE CXString
 //   clang_constructUSR_ObjCProtocol(const char *protocol_name);
+
+// /**
+//  * \brief Construct a USR for a specified Objective-C instance variable and
+//  *   the USR for its containing class.
+//  */
+// CINDEX_LINKAGE CXString clang_constructUSR_ObjCIvar(const char *name,
+//                                                     CXString classUSR);
+
+// /**
+//  * \brief Construct a USR for a specified Objective-C method and
+//  *   the USR for its containing class.
+//  */
+// CINDEX_LINKAGE CXString clang_constructUSR_ObjCMethod(const char *name,
+//                                                       unsigned isInstanceMethod,
+//                                                       CXString classUSR);
+
+// /**
+//  * \brief Construct a USR for a specified Objective-C property and the USR
+//  *  for its containing class.
+//  */
+// CINDEX_LINKAGE CXString clang_constructUSR_ObjCProperty(const char *property,
+//                                                         CXString classUSR);
+
+/** \brief For a cursor that is a reference, retrieve a cursor representing the
+ * entity that it references.
+ *
+ * Reference cursors refer to other entities in the AST. For example, an
+ * Objective-C superclass reference cursor refers to an Objective-C class.
+ * This function produces the cursor for the Objective-C class from the
+ * cursor for the superclass reference. If the input cursor is a declaration or
+ * definition, it returns that declaration or definition unchanged.
+ * Otherwise, returns the NULL cursor.
+ */
+func (c Cursor) Referenced() Cursor {
+	o := C.clang_getCursorReferenced(c.c)
+	return Cursor{o}
+}
+
+/**
+ *  \brief For a cursor that is either a reference to or a declaration
+ *  of some entity, retrieve a cursor that describes the definition of
+ *  that entity.
+ *
+ *  Some entities can be declared multiple times within a translation
+ *  unit, but only one of those declarations can also be a
+ *  definition. For example, given:
+ *
+ *  \code
+ *  int f(int, int);
+ *  int g(int x, int y) { return f(x, y); }
+ *  int f(int a, int b) { return a + b; }
+ *  int f(int, int);
+ *  \endcode
+ *
+ *  there are three declarations of the function "f", but only the
+ *  second one is a definition. The clang_getCursorDefinition()
+ *  function will take any cursor pointing to a declaration of "f"
+ *  (the first or fourth lines of the example) or a cursor referenced
+ *  that uses "f" (the call to "f' inside "g") and will return a
+ *  declaration cursor pointing to the definition (the second "f"
+ *  declaration).
+ *
+ *  If given a cursor for which there is no corresponding definition,
+ *  e.g., because there is no definition of that entity within this
+ *  translation unit, returns a NULL cursor.
+ */
+func (c Cursor) DefinitionCursor() Cursor {
+	o := C.clang_getCursorDefinition(c.c)
+	return Cursor{o}
+}
+
+/**
+ * \brief Determine whether the declaration pointed to by this cursor
+ * is also a definition of that entity.
+ */
+func (c Cursor) IsDefinition() bool {
+	o := C.clang_isCursorDefinition(c.c)
+	if o != C.uint(0) {
+		return true
+	}
+	return false
+}
+
+/**
+ * \brief Retrieve the canonical cursor corresponding to the given cursor.
+ *
+ * In the C family of languages, many kinds of entities can be declared several
+ * times within a single translation unit. For example, a structure type can
+ * be forward-declared (possibly multiple times) and later defined:
+ *
+ * \code
+ * struct X;
+ * struct X;
+ * struct X {
+ *   int member;
+ * };
+ * \endcode
+ *
+ * The declarations and the definition of \c X are represented by three 
+ * different cursors, all of which are declarations of the same underlying 
+ * entity. One of these cursor is considered the "canonical" cursor, which
+ * is effectively the representative for the underlying entity. One can 
+ * determine if two cursors are declarations of the same underlying entity by
+ * comparing their canonical cursors.
+ *
+ * \returns The canonical cursor for the entity referred to by the given cursor.
+ */
+func (c Cursor) CanonicalCursor() Cursor {
+	o := C.clang_getCanonicalCursor(c.c)
+	return Cursor{o}
+}
+
 
 // EOF
