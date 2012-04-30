@@ -25,6 +25,8 @@ here:
 
  https://bitbucket.org/binet/go-clang/src/tip/cmd/go-clang-dump/main.go
 
+.. include:: https://bitbucket.org/binet/go-clang/src/tip/cmd/go-clang-dump/main.go
+
 ::
 
   package main
