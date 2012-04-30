@@ -40,3 +40,16 @@ const (
 	 */
 	TK_Comment = C.CXToken_Comment
 )
+
+// Token is a single preprocessing token.
+type Token struct {
+	c C.CXToken
+}
+
+// Kind determines the kind of this token
+func (t Token) Kind() TokenKind {
+	o := C.clang_getTokenKind(t.c)
+	return TokenKind(o)
+}
+
+// EOF
