@@ -68,3 +68,5 @@ func main() {
 
 	fmt.Printf(":: bye.\n")
 }
+
+// EOF
