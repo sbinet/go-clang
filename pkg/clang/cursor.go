@@ -225,9 +225,6 @@ func (c Cursor) Linkage() LinkageKind {
 	return LinkageKind(o)
 }
 
-//
-type AvailabilityKind uint32
-
 // Availability returns the availability of the entity that this cursor refers to
 func (c Cursor) Availability() AvailabilityKind {
 	o := C.clang_getCursorAvailability(c.c)
