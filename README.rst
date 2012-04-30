@@ -37,3 +37,11 @@ Limitations
 
 - Go-doc documentation is lagging (but the doxygen docs from the C-API
   of ``CLang`` are in the ``.go`` files)
+
+
+Documentation
+-------------
+
+Is provided thru ``gopkg``:
+
+ http://gopkgdoc.appspot.com/pkg/bitbucket.org/binet/go-clang/pkg/clang
