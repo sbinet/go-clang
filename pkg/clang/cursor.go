@@ -1,8 +1,10 @@
 package clang
 
 // #include <stdlib.h>
-// #cgo LDFLAGS: -L/opt/local/libexec/llvm-3.0/lib -lclang
-// #include "/opt/local/libexec/llvm-3.0/include/clang-c/Index.h"
+// #cgo LDFLAGS: -L/opt/local/libexec/llvm-3.0/lib -L/usr/lib/llvm -lclang
+// #cgo CFLAGS: -I/opt/local/libexec/llvm-3.0/include -I.
+// #include "clang-c/Index.h"
+// #include "go-clang.h"
 // inline static
 // CXCursor _go_clang_ocursor_at(CXCursor *c, int idx) {
 //   return c[idx];
@@ -10,27 +12,7 @@ package clang
 //
 import "C"
 import (
-	//"unsafe"
-)
-
-/**
- * \brief Describes the kind of entity that a cursor refers to.
- */
-type CursorKind uint32 //FIXME: use uint32? int64?
-const (
-  /**
-   * \brief A declaration whose specific kind is not exposed via this
-   * interface.
-   *
-   * Unexposed declarations have the same operations as any other kind
-   * of declaration; one can extract their location information,
-   * spelling, find their definitions, etc. However, the specific kind
-   * of the declaration is not reported.
-   */
-	CK_UnexposedDecl CursorKind = C.CXCursor_UnexposedDecl
-
-	// A C or C++ struct.
-	CK_StructDecl = C.CXCursor_StructDecl
+//"unsafe"
 )
 
 /**
@@ -183,7 +165,7 @@ func (ck CursorKind) IsPreprocessing() bool {
 	}
 	return false
 }
-  
+
 /***
  * \brief Determine whether the given cursor represents a currently
  *  unexposed piece of the AST (e.g., CXCursor_UnexposedStmt).
@@ -200,6 +182,7 @@ func (ck CursorKind) IsUnexposed() bool {
  * \brief Describe the linkage of the entity referred to by a cursor.
  */
 type LinkageKind uint32
+
 const (
 	/** \brief This value indicates that no linkage information is available
 	 * for a provided CXCursor. */
@@ -233,11 +216,12 @@ func (c Cursor) Availability() AvailabilityKind {
 
 // LanguageKind describes the "language" of the entity referred to by a cursor.
 type LanguageKind uint32
+
 const (
-	LanguageInvalid LanguageKind = C.CXLanguage_Invalid
-	LanguageC  = C.CXLanguage_C
-	LanguageObjC  = C.CXLanguage_ObjC
-	LanguageCPlusPlus = C.CXLanguage_CPlusPlus
+	LanguageInvalid   LanguageKind = C.CXLanguage_Invalid
+	LanguageC                      = C.CXLanguage_C
+	LanguageObjC                   = C.CXLanguage_ObjC
+	LanguageCPlusPlus              = C.CXLanguage_CPlusPlus
 )
 
 // Language returns the "language" of the entity referred to by a cursor.
@@ -250,6 +234,15 @@ func (c Cursor) Language() LanguageKind {
 func (c Cursor) TranslationUnit() TranslationUnit {
 	o := C.clang_Cursor_getTranslationUnit(c.c)
 	return TranslationUnit{o}
+}
+
+// DeclObjCTypeEncoding returns the Objective-C type encoding for the
+// specified declaration.
+func (c Cursor) DeclObjCTypeEncoding() string {
+	o := C.clang_getDeclObjCTypeEncoding(c.c)
+	cstr := cxstring{o}
+	defer cstr.Dispose()
+	return cstr.String()
 }
 
 // CursorSet is a fast container representing a set of Cursors.
@@ -498,11 +491,12 @@ func (c Cursor) IsVirtualBase() bool {
  * cursor with kind CX_CXXBaseSpecifier.
  */
 type AccessSpecifier uint32
+
 const (
-	AS_Invalid AccessSpecifier = C.CX_CXXInvalidAccessSpecifier
-	AS_Public = C.CX_CXXPublic
-	AS_Protected = C.CX_CXXProtected
-	AS_Private = C.CX_CXXPrivate
+	AS_Invalid   AccessSpecifier = C.CX_CXXInvalidAccessSpecifier
+	AS_Public                    = C.CX_CXXPublic
+	AS_Protected                 = C.CX_CXXProtected
+	AS_Private                   = C.CX_CXXPrivate
 )
 
 /**
@@ -585,5 +579,92 @@ const (
 	 */
 	CVR_Recurse = C.CXChildVisit_Recurse
 )
+
+/**
+ * \brief Visitor invoked for each cursor found by a traversal.
+ *
+ * This visitor function will be invoked for each cursor found by
+ * clang_visitCursorChildren(). Its first argument is the cursor being
+ * visited, its second argument is the parent visitor for that cursor,
+ * and its third argument is the client data provided to
+ * clang_visitCursorChildren().
+ *
+ * The visitor should return one of the \c CXChildVisitResult values
+ * to direct clang_visitCursorChildren().
+ */
+type CursorVisitor func(cursor, parent Cursor) (status ChildVisitResult)
+
+/**
+ * \brief Visit the children of a particular cursor.
+ *
+ * This function visits all the direct children of the given cursor,
+ * invoking the given \p visitor function with the cursors of each
+ * visited child. The traversal may be recursive, if the visitor returns
+ * \c CXChildVisit_Recurse. The traversal may also be ended prematurely, if
+ * the visitor returns \c CXChildVisit_Break.
+ *
+ * \param parent the cursor whose child may be visited. All kinds of
+ * cursors can be visited, including invalid cursors (which, by
+ * definition, have no children).
+ *
+ * \param visitor the visitor function that will be invoked for each
+ * child of \p parent.
+ *
+ * \param client_data pointer data supplied by the client, which will
+ * be passed to the visitor each time it is invoked.
+ *
+ * \returns a non-zero value if the traversal was terminated
+ * prematurely by the visitor returning \c CXChildVisit_Break.
+ */
+func (c Cursor) Visit(visitor CursorVisitor) bool {
+	g_visitor = visitor
+	o := C._go_clang_visit_children(c.c)
+	if o != C.uint(0) {
+		return false
+	}
+	return true
+}
+
+var g_visitor CursorVisitor
+
+//export GoClangCursorVisitor
+func GoClangCursorVisitor(cursor, parent C.CXCursor) (status ChildVisitResult) {
+	o := g_visitor(Cursor{cursor}, Cursor{parent})
+	return o
+}
+
+/**
+ * \brief Retrieve a Unified Symbol Resolution (USR) for the entity referenced
+ * by the given cursor.
+ *
+ * A Unified Symbol Resolution (USR) is a string that identifies a particular
+ * entity (function, class, variable, etc.) within a program. USRs can be
+ * compared across translation units to determine, e.g., when references in
+ * one translation refer to an entity defined in another translation unit.
+ */
+func (c Cursor) USR() string {
+	cstr := cxstring{C.clang_getCursorUSR(c.c)}
+	defer cstr.Dispose()
+	return cstr.String()
+}
+
+//FIXME
+// /**
+//  * \brief Construct a USR for a specified Objective-C class.
+//  */
+// CINDEX_LINKAGE CXString clang_constructUSR_ObjCClass(const char *class_name);
+
+// /**
+//  * \brief Construct a USR for a specified Objective-C category.
+//  */
+// CINDEX_LINKAGE CXString
+//   clang_constructUSR_ObjCCategory(const char *class_name,
+//                                  const char *category_name);
+
+// /**
+//  * \brief Construct a USR for a specified Objective-C protocol.
+//  */
+// CINDEX_LINKAGE CXString
+//   clang_constructUSR_ObjCProtocol(const char *protocol_name);
 
 // EOF
