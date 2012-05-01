@@ -1,8 +1,6 @@
 package clang
 
 // #include <stdlib.h>
-// #cgo LDFLAGS: -L/opt/local/libexec/llvm-3.0/lib -L/usr/lib/llvm -lclang
-// #cgo CFLAGS: -I/opt/local/libexec/llvm-3.0/include
 // #include "clang-c/Index.h"
 // inline static
 // CXCursor _go_clang_ocursor_at(CXCursor *c, int idx) {
