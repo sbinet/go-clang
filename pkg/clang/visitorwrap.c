@@ -6,9 +6,9 @@
 #include "go-clang.h"
 
 unsigned
-_go_clang_visit_children(CXCursor c)
+_go_clang_visit_children(CXCursor c, void *fct)
 {
-  return clang_visitChildren(c, (CXCursorVisitor)&GoClangCursorVisitor, NULL);
+  return clang_visitChildren(c, (CXCursorVisitor)&GoClangCursorVisitor, fct);
 }
 
 /* EOF */

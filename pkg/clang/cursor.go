@@ -10,7 +10,7 @@ package clang
 //
 import "C"
 import (
-//"unsafe"
+	"unsafe"
 )
 
 /**
@@ -632,19 +632,17 @@ type CursorVisitor func(cursor, parent Cursor) (status ChildVisitResult)
  * prematurely by the visitor returning \c CXChildVisit_Break.
  */
 func (c Cursor) Visit(visitor CursorVisitor) bool {
-	g_visitor = visitor
-	o := C._go_clang_visit_children(c.c)
+	o := C._go_clang_visit_children(c.c, unsafe.Pointer(&visitor))
 	if o != C.uint(0) {
 		return false
 	}
 	return true
 }
 
-var g_visitor CursorVisitor
-
 //export GoClangCursorVisitor
-func GoClangCursorVisitor(cursor, parent C.CXCursor) (status ChildVisitResult) {
-	o := g_visitor(Cursor{cursor}, Cursor{parent})
+func GoClangCursorVisitor(cursor, parent C.CXCursor, cfct unsafe.Pointer) (status ChildVisitResult) {
+	fct := *(*CursorVisitor)(cfct)
+	o := fct(Cursor{cursor}, Cursor{parent})
 	return o
 }
 
