@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"os"
 
-	"bitbucket.org/binet/go-clang/pkg/clang"
+	"github.com/sbinet/go-clang/pkg/clang"
 )
 
 var fname *string = flag.String("fname", "", "the file to analyze")

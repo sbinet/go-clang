@@ -14,7 +14,7 @@ shell:
 
   $ CGO_CFLAGS="-I/somewhere" \
   CGO_LDFLAGS="-L/somewhere/else" \
-  go get bitbucket.org/binet/go-clang/pkg/clang
+  go get github.com/sbinet/go-clang/pkg/clang
 
 
 Example
@@ -23,7 +23,7 @@ Example
 An example on how to use the AST visitor of ``CLang`` is provided
 here:
 
- https://bitbucket.org/binet/go-clang/src/tip/cmd/go-clang-dump/main.go
+ https://github.com/sbinet/go-clang/src/tip/cmd/go-clang-dump/main.go
 
 ::
 
@@ -34,7 +34,7 @@ here:
   	"fmt"
   	"os"
 
-  	"bitbucket.org/binet/go-clang/pkg/clang"
+  	"github.com/sbinet/go-clang/pkg/clang"
   )
 
   var fname *string = flag.String("fname", "", "the file to analyze")
@@ -96,7 +96,7 @@ here:
 
 which can be installed like so::
 
-  $ go get bitbucket.org/binet/go-clang/cmd/go-clang-dump
+  $ go get github.com/sbinet/go-clang/cmd/go-clang-dump
 
 Limitations
 -----------
@@ -113,5 +113,5 @@ Documentation
 
 Is provided thru ``gopkg``:
 
- http://gopkgdoc.appspot.com/pkg/bitbucket.org/binet/go-clang/pkg/clang
+ http://gopkgdoc.appspot.com/pkg/github.com/sbinet/go-clang/pkg/clang
 
