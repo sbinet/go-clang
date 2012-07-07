@@ -249,27 +249,6 @@ const (
    * we are testing C++ precompiled preamble support. It is deprecated.
    */
 	TU_CXXChainedPCH = C.CXTranslationUnit_CXXChainedPCH
-  
-  /**
-   * \brief Used to indicate that the "detailed" preprocessing record,
-   * if requested, should also contain nested macro expansions.
-   *
-   * Nested macro expansions (i.e., macro expansions that occur
-   * inside another macro expansion) can, in some code bases, require
-   * a large amount of storage to due preprocessor metaprogramming. Moreover,
-   * its fairly rare that this information is useful for libclang clients.
-   */
-	TU_NestedMacroExpansions = C.CXTranslationUnit_NestedMacroExpansions
-
-  /**
-   * \brief Legacy name to indicate that the "detailed" preprocessing record,
-   * if requested, should contain nested macro expansions.
-   *
-   * \see CXTranslationUnit_NestedMacroExpansions for the current name for this
-   * value, and its semantics. This is just an alias.
-   */
-	TU_NestedMacroInstantiations = C.CXTranslationUnit_NestedMacroInstantiations
-	
 )
 
 /**
