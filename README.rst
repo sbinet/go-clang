@@ -23,7 +23,7 @@ Example
 An example on how to use the AST visitor of ``CLang`` is provided
 here:
 
- https://github.com/sbinet/go-clang/src/tip/cmd/go-clang-dump/main.go
+ https://github.com/sbinet/go-clang/blob/master/cmd/go-clang-dump/main.go
 
 ::
 
