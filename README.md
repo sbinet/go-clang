@@ -11,8 +11,8 @@ a bit the various CFLAGS and LDFLAGS options, or pass them via the
 shell:
 
 ```
-$ CGO_CFLAGS="-I/somewhere" \
-  CGO_LDFLAGS="-L/somewhere/else" \
+$ CGO_CFLAGS="-I`llvm-config --includedir`" \
+  CGO_LDFLAGS="-L`llvm-config --libdir`" \
   go get github.com/sbinet/go-clang/pkg/clang
 ```
 
