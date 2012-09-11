@@ -308,14 +308,15 @@ func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags
 		defer C.free(unsafe.Pointer(cstr))
 		c_cmds[i] = cstr
 	}
-	var c_args *C.char = nil
+	
+	var c_args **C.char = nil
 	if len(args) > 0 {
-		c_args = c_cmds[0]
+		c_args = &c_cmds[0]
 	}
 	o := C.clang_parseTranslationUnit(
 		idx.c,
 		c_fname,
-		&c_args, c_nargs,
+		c_args, c_nargs,
 		nil, C.uint(0), 
 		C.uint(options))
 	return TranslationUnit{o}
