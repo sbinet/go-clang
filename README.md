@@ -1,6 +1,8 @@
 go-clang
 ========
 
+[![Build Status](https://secure.travis-ci.org/sbinet/go-clang.png)](http://travis-ci.org/sbinet/go-clang)
+
 Naive Go bindings to the C-API of ``CLang``.
 
 Installation

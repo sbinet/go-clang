@@ -1,0 +1,15 @@
+language: go
+
+before_install:
+   - sudo apt-get update -qq
+   - sudo apt-get install libffi-dev -qq
+
+install: go get -d -v ./pkg/... && go build -v ./pkg/...
+script: go test ./pkg/...
+
+notifications:
+  email:
+    recipients:
+      - binet@cern.ch
+    on_success: change
+    on_failure: always
