@@ -1,7 +1,7 @@
 language: go
 
 before_install:
-   - sudo add-apt-repository ppa:costamagnagianfranco/locutusofborg-ppa
+   - sudo add-apt-repository ppa:costamagnagianfranco/locutusofborg-ppa -qq
    - sudo apt-get update -qq
    - sudo apt-get install libclang-dev -qq
 
