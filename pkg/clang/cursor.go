@@ -816,6 +816,27 @@ func (c Cursor) CanonicalCursor() Cursor {
 }
 
 /**
+ * \brief Given a cursor that represents a declaration, return the associated
+ * comment text, including comment markers.
+ */
+func (c Cursor) RawCommentText() string {
+	cstr := cxstring{C.clang_Cursor_getRawCommentText(c.c)}
+	defer cstr.Dispose()
+	return cstr.String()
+}
+
+/**
+ * \brief Given a cursor that represents a documentable entity (e.g.,
+ * declaration), return the associated \\brief paragraph; otherwise return the
+ * first paragraph.
+ */
+func (c Cursor) BriefCommentText() string {
+	cstr := cxstring{C.clang_Cursor_getBriefCommentText(c.c)}
+	defer cstr.Dispose()
+	return cstr.String()
+}
+
+/**
  * \defgroup CINDEX_CPP C++ AST introspection
  *
  * The routines in this group provide access information in the ASTs specific
