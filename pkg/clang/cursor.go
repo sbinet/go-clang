@@ -484,6 +484,52 @@ func (c Cursor) Type() Type {
 }
 
 /**
+ * \brief Retrieve the underlying type of a typedef declaration.
+ *
+ * If the cursor does not reference a typedef declaration, an invalid type is
+ * returned.
+ */
+func (c Cursor) TypedefDeclUnderlyingType() Type {
+	o := C.clang_getTypedefDeclUnderlyingType(c.c)
+	return Type{o}
+}
+
+/**
+ * \brief Retrieve the integer type of an enum declaration.
+ *
+ * If the cursor does not reference an enum declaration, an invalid type is
+ * returned.
+ */
+func (c Cursor) EnumDeclIntegerType() Type {
+	o := C.clang_getEnumDeclIntegerType(c.c)
+	return Type{o}
+}
+
+/**
+ * \brief Retrieve the integer value of an enum constant declaration as a signed
+ *  long long.
+ *
+ * If the cursor does not reference an enum constant declaration, LLONG_MIN is returned.
+ * Since this is also potentially a valid constant value, the kind of the cursor
+ * must be verified before calling this function.
+ */
+func (c Cursor) EnumConstantDeclValue() int64 {
+	return int64(C.clang_getEnumConstantDeclValue(c.c))
+}
+
+/**
+ * \brief Retrieve the integer value of an enum constant declaration as an unsigned
+ *  long long.
+ *
+ * If the cursor does not reference an enum constant declaration, ULLONG_MAX is returned.
+ * Since this is also potentially a valid constant value, the kind of the cursor
+ * must be verified before calling this function.
+ */
+func (c Cursor) EnumConstantDeclUnsignedValue() uint64 {
+	return uint64(C.clang_getEnumConstantDeclUnsignedValue(c.c))
+}
+
+/**
  * \brief Retrieve the number of non-variadic arguments associated with a given
  * cursor.
  *
