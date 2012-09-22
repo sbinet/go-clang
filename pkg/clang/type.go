@@ -78,6 +78,10 @@ type Type struct {
 	c C.CXType
 }
 
+func (c Type) Kind() TypeKind {
+	return TypeKind(c.c.kind)
+}
+
 // Spelling returns the spelling of a given TypeKind.
 func (t TypeKind) Spelling() string {
 	cstr := cxstring{C.clang_getTypeKindSpelling(t.to_c())}

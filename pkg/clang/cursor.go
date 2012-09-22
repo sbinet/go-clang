@@ -484,6 +484,30 @@ func (c Cursor) Type() Type {
 }
 
 /**
+ * \brief Retrieve the number of non-variadic arguments associated with a given
+ * cursor.
+ *
+ * If a cursor that is not a function or method is passed in, -1 is returned.
+ */
+// CINDEX_LINKAGE int clang_Cursor_getNumArguments(CXCursor C);
+func (c Cursor) NumArguments() int {
+	n := C.clang_Cursor_getNumArguments(c.c)
+	return int(n)
+}
+
+/**
+ * \brief Retrieve the argument cursor of a function or method.
+ *
+ * If a cursor that is not a function or method is passed in or the index
+ * exceeds the number of arguments, an invalid cursor is returned.
+ */
+// CINDEX_LINKAGE CXCursor clang_Cursor_getArgument(CXCursor C, unsigned i);
+func (c Cursor) Argument(i uint) Cursor {
+	o := C.clang_Cursor_getArgument(c.c, C.uint(i))
+	return Cursor{o}
+}
+
+/**
  * \brief Retrieve the result type associated with a given cursor.  This only
  *  returns a valid type of the cursor refers to a function or method.
  */
