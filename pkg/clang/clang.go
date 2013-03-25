@@ -14,6 +14,7 @@ import (
  * it being deprecated or unavailable.
  */
 type AvailabilityKind uint32
+
 const (
 
 	/**
@@ -21,10 +22,10 @@ const (
 	 */
 	Available AvailabilityKind = C.CXAvailability_Available
 
-  /**
-   * \brief The entity is available, but has been deprecated (and its use is
-   * not recommended).
-   */
+	/**
+	 * \brief The entity is available, but has been deprecated (and its use is
+	 * not recommended).
+	 */
 	Deprecated AvailabilityKind = C.CXAvailability_Deprecated
 	/**
 	 * \brief The entity is not available; any use of it will be an error.
@@ -42,7 +43,6 @@ const (
 type Index struct {
 	c C.CXIndex
 }
-
 
 // NewIndex provides a shared context for creating
 // translation units. It provides two options:
@@ -176,78 +176,71 @@ func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string
  * constructing the translation unit.
  */
 type TranslationUnitFlags uint32
+
 const (
-  /**
-   * \brief Used to indicate that no special translation-unit options are
-   * needed.
-   */
+	/**
+	 * \brief Used to indicate that no special translation-unit options are
+	 * needed.
+	 */
 	TU_None = C.CXTranslationUnit_None
 
-  /**
-   * \brief Used to indicate that the parser should construct a "detailed"
-   * preprocessing record, including all macro definitions and instantiations.
-   *
-   * Constructing a detailed preprocessing record requires more memory
-   * and time to parse, since the information contained in the record
-   * is usually not retained. However, it can be useful for
-   * applications that require more detailed information about the
-   * behavior of the preprocessor.
-   */
+	/**
+	 * \brief Used to indicate that the parser should construct a "detailed"
+	 * preprocessing record, including all macro definitions and instantiations.
+	 *
+	 * Constructing a detailed preprocessing record requires more memory
+	 * and time to parse, since the information contained in the record
+	 * is usually not retained. However, it can be useful for
+	 * applications that require more detailed information about the
+	 * behavior of the preprocessor.
+	 */
 	TU_DetailedPreprocessingRecord = C.CXTranslationUnit_DetailedPreprocessingRecord
 
-  /**
-   * \brief Used to indicate that the translation unit is incomplete.
-   *
-   * When a translation unit is considered "incomplete", semantic
-   * analysis that is typically performed at the end of the
-   * translation unit will be suppressed. For example, this suppresses
-   * the completion of tentative declarations in C and of
-   * instantiation of implicitly-instantiation function templates in
-   * C++. This option is typically used when parsing a header with the
-   * intent of producing a precompiled header.
-   */
+	/**
+	 * \brief Used to indicate that the translation unit is incomplete.
+	 *
+	 * When a translation unit is considered "incomplete", semantic
+	 * analysis that is typically performed at the end of the
+	 * translation unit will be suppressed. For example, this suppresses
+	 * the completion of tentative declarations in C and of
+	 * instantiation of implicitly-instantiation function templates in
+	 * C++. This option is typically used when parsing a header with the
+	 * intent of producing a precompiled header.
+	 */
 	TU_Incomplete = C.CXTranslationUnit_Incomplete
-  
-  /**
-   * \brief Used to indicate that the translation unit should be built with an 
-   * implicit precompiled header for the preamble.
-   *
-   * An implicit precompiled header is used as an optimization when a
-   * particular translation unit is likely to be reparsed many times
-   * when the sources aren't changing that often. In this case, an
-   * implicit precompiled header will be built containing all of the
-   * initial includes at the top of the main file (what we refer to as
-   * the "preamble" of the file). In subsequent parses, if the
-   * preamble or the files in it have not changed, \c
-   * clang_reparseTranslationUnit() will re-use the implicit
-   * precompiled header to improve parsing performance.
-   */
+
+	/**
+	 * \brief Used to indicate that the translation unit should be built with an 
+	 * implicit precompiled header for the preamble.
+	 *
+	 * An implicit precompiled header is used as an optimization when a
+	 * particular translation unit is likely to be reparsed many times
+	 * when the sources aren't changing that often. In this case, an
+	 * implicit precompiled header will be built containing all of the
+	 * initial includes at the top of the main file (what we refer to as
+	 * the "preamble" of the file). In subsequent parses, if the
+	 * preamble or the files in it have not changed, \c
+	 * clang_reparseTranslationUnit() will re-use the implicit
+	 * precompiled header to improve parsing performance.
+	 */
 	TU_PrecompiledPreamble = C.CXTranslationUnit_PrecompiledPreamble
-  
-  /**
-   * \brief Used to indicate that the translation unit should cache some
-   * code-completion results with each reparse of the source file.
-   *
-   * Caching of code-completion results is a performance optimization that
-   * introduces some overhead to reparsing but improves the performance of
-   * code-completion operations.
-   */
+
+	/**
+	 * \brief Used to indicate that the translation unit should cache some
+	 * code-completion results with each reparse of the source file.
+	 *
+	 * Caching of code-completion results is a performance optimization that
+	 * introduces some overhead to reparsing but improves the performance of
+	 * code-completion operations.
+	 */
 	TU_CacheCompletionResults = C.CXTranslationUnit_CacheCompletionResults
 
 	/**
-   * \brief DEPRECATED: Enable precompiled preambles in C++.
-   *
-   * Note: this is a *temporary* option that is available only while
-   * we are testing C++ precompiled preamble support. It is deprecated.
-   */
-	TU_CXXPrecompiledPreamble = C.CXTranslationUnit_CXXPrecompiledPreamble
-
-  /**
-   * \brief DEPRECATED: Enabled chained precompiled preambles in C++.
-   *
-   * Note: this is a *temporary* option that is available only while
-   * we are testing C++ precompiled preamble support. It is deprecated.
-   */
+	 * \brief DEPRECATED: Enabled chained precompiled preambles in C++.
+	 *
+	 * Note: this is a *temporary* option that is available only while
+	 * we are testing C++ precompiled preamble support. It is deprecated.
+	 */
 	TU_CXXChainedPCH = C.CXTranslationUnit_CXXChainedPCH
 )
 
@@ -303,12 +296,12 @@ func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags
 
 	c_nargs := C.int(len(args))
 	c_cmds := make([]*C.char, len(args))
-	for i,_ := range args {
+	for i, _ := range args {
 		cstr := C.CString(args[i])
 		defer C.free(unsafe.Pointer(cstr))
 		c_cmds[i] = cstr
 	}
-	
+
 	var c_args **C.char = nil
 	if len(args) > 0 {
 		c_args = &c_cmds[0]
@@ -317,7 +310,7 @@ func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags
 		idx.c,
 		c_fname,
 		c_args, c_nargs,
-		nil, C.uint(0), 
+		nil, C.uint(0),
 		C.uint(options))
 	return TranslationUnit{o}
 
@@ -498,14 +491,12 @@ func NewNullRange() SourceRange {
 	return SourceRange{C.clang_getNullRange()}
 }
 
-
 // NewRange creates a source range given the beginning and ending source
 // locations.
 func NewRange(beg, end SourceLocation) SourceRange {
 	o := C.clang_getRange(beg.c, end.c)
 	return SourceRange{o}
 }
-
 
 // EqualRanges determines whether two ranges are equivalent.
 func EqualRanges(r1, r2 SourceRange) bool {
@@ -524,7 +515,6 @@ func (r SourceRange) IsNull() bool {
 	}
 	return false
 }
-
 
 // ExpansionLocation returns the file, line, column, and offset represented by
 // the given source location.
@@ -599,10 +589,10 @@ func (l SourceLocation) PresumedLocation() (fname string, line, column uint) {
 	cname := cxstring{}
 	defer cname.Dispose()
 	cline := C.uint(0)
-	ccol  := C.uint(0)
+	ccol := C.uint(0)
 	C.clang_getPresumedLocation(l.c, &cname.c, &cline, &ccol)
 	fname = cname.String()
-	line  = uint(cline)
+	line = uint(cline)
 	column = uint(ccol)
 	return
 }
@@ -616,16 +606,16 @@ func (l SourceLocation) PresumedLocation() (fname string, line, column uint) {
  * details.
  */
 func (l SourceLocation) InstantiationLocation() (file File, line, column, offset uint) {
-	
+
 	cline := C.uint(0)
-	ccol  := C.uint(0)
-	coff  := C.uint(0)
+	ccol := C.uint(0)
+	coff := C.uint(0)
 	C.clang_getInstantiationLocation(l.c,
-                 &file.c,
-                 &cline,
-                 &ccol,
-                 &coff)
-	line  = uint(cline)
+		&file.c,
+		&cline,
+		&ccol,
+		&coff)
+	line = uint(cline)
 	column = uint(ccol)
 	offset = uint(coff)
 	return
@@ -654,16 +644,16 @@ func (l SourceLocation) InstantiationLocation() (file File, line, column, offset
  * buffer to which the given source location points.
  */
 func (l SourceLocation) SpellingLocation() (file File, line, column, offset uint) {
-	
+
 	cline := C.uint(0)
-	ccol  := C.uint(0)
-	coff  := C.uint(0)
+	ccol := C.uint(0)
+	coff := C.uint(0)
 	C.clang_getSpellingLocation(l.c,
-                 &file.c,
-                 &cline,
-                 &ccol,
-                 &coff)
-	line  = uint(cline)
+		&file.c,
+		&cline,
+		&ccol,
+		&coff)
+	line = uint(cline)
 	column = uint(ccol)
 	offset = uint(coff)
 	return
@@ -686,6 +676,5 @@ func (s SourceRange) End() SourceLocation {
 	o := C.clang_getRangeEnd(s.c)
 	return SourceLocation{o}
 }
-
 
 // EOF
