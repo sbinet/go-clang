@@ -6,11 +6,15 @@ before_install:
    - sudo apt-get install libclang-dev -qq
 
 install: 
-   - git checkout release/clang-3.0
-   - go get -d -v ./...
-   - go build -v ./...
+  - mkdir -p $GOPATH/src/github.com/sbinet/go-clang
+  - pushd $GOPATH/src/github.com/sbinet/go-clang
+  - git checkout release/clang-3.0
+  - go get -d -v ./...
+  - go build -v ./...
 
-script: go test ./...
+script: 
+  - pushd $GOPATH/src/github.com/sbinet/go-clang
+  - go test ./...
 
 notifications:
   email:
