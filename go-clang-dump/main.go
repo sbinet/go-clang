@@ -10,7 +10,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sbinet/go-clang/pkg/clang"
+	"github.com/sbinet/go-clang"
 )
 
 var fname *string = flag.String("fname", "", "the file to analyze")
@@ -54,7 +54,7 @@ func main() {
 			fmt.Printf("cursor: <none>\n")
 			return clang.CVR_Continue
 		}
-		fmt.Printf("%s: %s (%s)\n", 
+		fmt.Printf("%s: %s (%s)\n",
 			cursor.Kind().Spelling(), cursor.Spelling(), cursor.USR())
 		switch cursor.Kind() {
 		case clang.CK_ClassDecl, clang.CK_EnumDecl,
