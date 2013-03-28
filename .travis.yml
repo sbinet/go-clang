@@ -6,7 +6,7 @@ before_install:
    - sudo apt-get install libclang-dev -qq
 
 install: 
-   - git co release/clang-3.0
+   - git checkout release/clang-3.0
    - go get -d -v ./...
    - go build -v ./...
 
