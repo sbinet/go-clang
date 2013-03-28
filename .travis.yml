@@ -5,8 +5,16 @@ before_install:
    - sudo apt-get update -qq
    - sudo apt-get install libclang-dev -qq
 
-install: go get -d -v ./pkg/... && go build -v ./pkg/...
-script: go test ./pkg/...
+install: 
+  - mkdir -p $GOPATH/src/github.com/sbinet/go-clang
+  - mv * $GOPATH/src/github.com/sbinet/go-clang/.
+  - pushd $GOPATH/src/github.com/sbinet/go-clang
+  - go get -d -v ./...
+  - go build -v ./...
+
+script: 
+  - pushd $GOPATH/src/github.com/sbinet/go-clang
+  - go test ./...
 
 notifications:
   email:
@@ -14,3 +22,8 @@ notifications:
       - binet@cern.ch
     on_success: change
     on_failure: always
+
+# whitelist
+branches:
+  only:
+    - release/clang-3.0
