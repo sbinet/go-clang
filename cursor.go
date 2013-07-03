@@ -60,7 +60,7 @@ func (c Cursor) Spelling() string {
  * \brief Retrieve the display name for the entity referenced by this cursor.
  *
  * The display name contains extra information that helps identify the cursor,
- * such as the parameters of a function or template or the arguments of a 
+ * such as the parameters of a function or template or the arguments of a
  * class template specialization.
  */
 func (c Cursor) DisplayName() string {
@@ -299,7 +299,7 @@ func (c CursorSet) Insert(cursor Cursor) bool {
  *
  * The semantic parent of a cursor is the cursor that semantically contains
  * the given \p cursor. For many declarations, the lexical and semantic parents
- * are equivalent (the lexical parent is returned by 
+ * are equivalent (the lexical parent is returned by
  * \c clang_getCursorLexicalParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
@@ -311,10 +311,10 @@ func (c CursorSet) Insert(cursor Cursor) bool {
  * void C::f() { }
  * \endcode
  *
- * In the out-of-line definition of \c C::f, the semantic parent is the 
+ * In the out-of-line definition of \c C::f, the semantic parent is the
  * the class \c C, of which this function is a member. The lexical parent is
  * the place where the declaration actually occurs in the source code; in this
- * case, the definition occurs in the translation unit. In general, the 
+ * case, the definition occurs in the translation unit. In general, the
  * lexical parent for a given entity can change without affecting the semantics
  * of the program, and the lexical parent of different declarations of the
  * same entity may be different. Changing the semantic parent of a declaration,
@@ -337,7 +337,7 @@ func (c Cursor) SemanticParent() Cursor {
  *
  * The lexical parent of a cursor is the cursor in which the given \p cursor
  * was actually written. For many declarations, the lexical and semantic parents
- * are equivalent (the semantic parent is returned by 
+ * are equivalent (the semantic parent is returned by
  * \c clang_getCursorSemanticParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
@@ -349,10 +349,10 @@ func (c Cursor) SemanticParent() Cursor {
  * void C::f() { }
  * \endcode
  *
- * In the out-of-line definition of \c C::f, the semantic parent is the 
+ * In the out-of-line definition of \c C::f, the semantic parent is the
  * the class \c C, of which this function is a member. The lexical parent is
  * the place where the declaration actually occurs in the source code; in this
- * case, the definition occurs in the translation unit. In general, the 
+ * case, the definition occurs in the translation unit. In general, the
  * lexical parent for a given entity can change without affecting the semantics
  * of the program, and the lexical parent of different declarations of the
  * same entity may be different. Changing the semantic parent of a declaration,
@@ -402,11 +402,11 @@ func (c Cursor) LexicalParent() Cursor {
  * \param cursor A cursor representing an Objective-C or C++
  * method. This routine will compute the set of methods that this
  * method overrides.
- * 
+ *
  * \param overridden A pointer whose pointee will be replaced with a
  * pointer to an array of cursors, representing the set of overridden
  * methods. If there are no overridden methods, the pointee will be
- * set to NULL. The pointee must be freed via a call to 
+ * set to NULL. The pointee must be freed via a call to
  * \c clang_disposeOverriddenCursors().
  *
  * \param num_overridden A pointer to the number of overridden
@@ -595,7 +595,7 @@ func (c Cursor) AccessSpecifier() AccessSpecifier {
 }
 
 /**
- * \brief Determine the number of overloaded declarations referenced by a 
+ * \brief Determine the number of overloaded declarations referenced by a
  * \c CXCursor_OverloadedDeclRef cursor.
  *
  * \param cursor The cursor whose overloaded declarations are being queried.
@@ -617,8 +617,8 @@ func (c Cursor) NumOverloadedDecls() int {
  * \param index The zero-based index into the set of overloaded declarations in
  * the cursor.
  *
- * \returns A cursor representing the declaration referenced by the given 
- * \c cursor at the specified \c index. If the cursor does not have an 
+ * \returns A cursor representing the declaration referenced by the given
+ * \c cursor at the specified \c index. If the cursor does not have an
  * associated set of overloaded declarations, or if the index is out of bounds,
  * returns \c clang_getNullCursor();
  */
@@ -847,10 +847,10 @@ func (c Cursor) IsDefinition() bool {
  * };
  * \endcode
  *
- * The declarations and the definition of \c X are represented by three 
- * different cursors, all of which are declarations of the same underlying 
+ * The declarations and the definition of \c X are represented by three
+ * different cursors, all of which are declarations of the same underlying
  * entity. One of these cursor is considered the "canonical" cursor, which
- * is effectively the representative for the underlying entity. One can 
+ * is effectively the representative for the underlying entity. One can
  * determine if two cursors are declarations of the same underlying entity by
  * comparing their canonical cursors.
  *
@@ -892,7 +892,7 @@ func (c Cursor) BriefCommentText() string {
  */
 
 /**
- * \brief Determine if a C++ member function or member function template is 
+ * \brief Determine if a C++ member function or member function template is
  * declared 'static'.
  */
 func (c Cursor) CXXMethod_IsStatic() bool {
@@ -943,10 +943,10 @@ func (c Cursor) TemplateCursorKind() CursorKind {
  * of a template, retrieve the cursor that represents the template that it
  * specializes or from which it was instantiated.
  *
- * This routine determines the template involved both for explicit 
+ * This routine determines the template involved both for explicit
  * specializations of templates and for implicit instantiations of the template,
  * both of which are referred to as "specializations". For a class template
- * specialization (e.g., \c std::vector<bool>), this routine will return 
+ * specialization (e.g., \c std::vector<bool>), this routine will return
  * either the primary template (\c std::vector) or, if the specialization was
  * instantiated from a class template partial specialization, the class template
  * partial specialization. For a class template partial specialization and a
@@ -954,7 +954,7 @@ func (c Cursor) TemplateCursorKind() CursorKind {
  * this routine will return the specialized template.
  *
  * For members of a class template (e.g., member functions, member classes, or
- * static data members), returns the specialized or instantiated member. 
+ * static data members), returns the specialized or instantiated member.
  * Although not strictly "templates" in the C++ language, members of class
  * templates have the same notions of specializations and instantiations that
  * templates do, so this routine treats them similarly.
@@ -962,7 +962,7 @@ func (c Cursor) TemplateCursorKind() CursorKind {
  * \param C A cursor that may be a specialization of a template or a member
  * of a template.
  *
- * \returns If the given cursor is a specialization or instantiation of a 
+ * \returns If the given cursor is a specialization or instantiation of a
  * template or a member thereof, the template or member that it specializes or
  * from which it was instantiated. Otherwise, returns a NULL cursor.
  */
@@ -977,11 +977,11 @@ func (c Cursor) SpecializedCursorTemplate() Cursor {
  *
  * \param C A cursor pointing to a member reference, a declaration reference, or
  * an operator call.
- * \param NameFlags A bitset with three independent flags: 
+ * \param NameFlags A bitset with three independent flags:
  * CXNameRange_WantQualifier, CXNameRange_WantTemplateArgs, and
  * CXNameRange_WantSinglePiece.
- * \param PieceIndex For contiguous names or when passing the flag 
- * CXNameRange_WantSinglePiece, only one piece with index 0 is 
+ * \param PieceIndex For contiguous names or when passing the flag
+ * CXNameRange_WantSinglePiece, only one piece with index 0 is
  * available. When the CXNameRange_WantSinglePiece flag is not passed for a
  * non-contiguous names, this index can be used to retreive the individual
  * pieces of the name. See also CXNameRange_WantSinglePiece.
@@ -995,6 +995,19 @@ func (c Cursor) ReferenceNameRange(flags NameRefFlags, pieceIdx uint) SourceRang
 	return SourceRange{o}
 }
 
+/**
+ * \brief Retrieve a completion string for an arbitrary declaration or macro
+ * definition cursor.
+ *
+ * \param cursor The cursor to query.
+ *
+ * \returns A non-context-sensitive completion string for declaration and macro
+ * definition cursors, or NULL for other kinds of cursors.
+ */
+func (c Cursor) CompletionString() CompletionString {
+	return CompletionString{C.clang_getCursorCompletionString(c.c)}
+}
+
 type NameRefFlags uint32
 
 const (
@@ -1005,7 +1018,7 @@ const (
 	NR_WantQualifier = C.CXNameRange_WantQualifier
 
 	/**
-	 * \brief Include the explicit template arguments, e.g. <int> in x.f<int>, in 
+	 * \brief Include the explicit template arguments, e.g. <int> in x.f<int>, in
 	 * the range.
 	 */
 	NR_WantTemplateArgs = C.CXNameRange_WantTemplateArgs

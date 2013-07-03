@@ -131,7 +131,7 @@ const (
 	 */
 	CK_TypeRef          = C.CXCursor_TypeRef
 	CK_CXXBaseSpecifier = C.CXCursor_CXXBaseSpecifier
-	/** 
+	/**
 	 * \brief A reference to a class template, function template, template
 	 * template parameter, or class template partial specialization.
 	 */
@@ -141,14 +141,14 @@ const (
 	 */
 	CK_NamespaceRef = C.CXCursor_NamespaceRef
 	/**
-	 * \brief A reference to a member of a struct, union, or class that occurs in 
+	 * \brief A reference to a member of a struct, union, or class that occurs in
 	 * some non-expression context, e.g., a designated initializer.
 	 */
 	CK_MemberRef = C.CXCursor_MemberRef
 	/**
 	 * \brief A reference to a labeled statement.
 	 *
-	 * This cursor kind is used to describe the jump to "start_over" in the 
+	 * This cursor kind is used to describe the jump to "start_over" in the
 	 * goto statement in the following example:
 	 *
 	 * \code
@@ -194,7 +194,7 @@ const (
 	 * argument-dependent lookup (e.g., the "swap" function at the end of the
 	 * example).
 	 *
-	 * The functions \c clang_getNumOverloadedDecls() and 
+	 * The functions \c clang_getNumOverloadedDecls() and
 	 * \c clang_getOverloadedDecl() can be used to retrieve the definitions
 	 * referenced by this cursor.
 	 */
@@ -461,9 +461,9 @@ const (
 	 */
 	CK_UnexposedStmt = C.CXCursor_UnexposedStmt
 
-	/** \brief A labelled statement in a function. 
+	/** \brief A labelled statement in a function.
 	 *
-	 * This cursor kind is used to describe the "start_over:" label statement in 
+	 * This cursor kind is used to describe the "start_over:" label statement in
 	 * the following example:
 	 *
 	 * \code
@@ -630,6 +630,10 @@ const (
 
 func (c CursorKind) to_c() uint32 {
 	return uint32(c)
+}
+
+func (c CursorKind) String() string {
+	return c.Spelling()
 }
 
 /* for debug/testing */
