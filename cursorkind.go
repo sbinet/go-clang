@@ -632,6 +632,10 @@ func (c CursorKind) to_c() uint32 {
 	return uint32(c)
 }
 
+func (c CursorKind) String() string {
+	return c.Spelling()
+}
+
 /* for debug/testing */
 func (c CursorKind) Spelling() string {
 	cstr := cxstring{C.clang_getCursorKindSpelling(c.to_c())}

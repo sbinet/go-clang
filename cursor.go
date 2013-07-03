@@ -995,6 +995,19 @@ func (c Cursor) ReferenceNameRange(flags NameRefFlags, pieceIdx uint) SourceRang
 	return SourceRange{o}
 }
 
+/**
+ * \brief Retrieve a completion string for an arbitrary declaration or macro
+ * definition cursor.
+ *
+ * \param cursor The cursor to query.
+ *
+ * \returns A non-context-sensitive completion string for declaration and macro
+ * definition cursors, or NULL for other kinds of cursors.
+ */
+func (c Cursor) CompletionString() CompletionString {
+	return CompletionString{C.clang_getCursorCompletionString(c.c)}
+}
+
 type NameRefFlags uint32
 
 const (
