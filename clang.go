@@ -153,7 +153,7 @@ func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string
 
 	c_nargs := C.int(len(args))
 	c_cmds := make([]*C.char, len(args))
-	for i,_ := range args {
+	for i, _ := range args {
 		cstr := C.CString(args[i])
 		defer C.free(unsafe.Pointer(cstr))
 		c_cmds[i] = cstr
@@ -210,7 +210,7 @@ const (
 	TU_Incomplete = C.CXTranslationUnit_Incomplete
 
 	/**
-	 * \brief Used to indicate that the translation unit should be built with an 
+	 * \brief Used to indicate that the translation unit should be built with an
 	 * implicit precompiled header for the preamble.
 	 *
 	 * An implicit precompiled header is used as an optimization when a
@@ -254,7 +254,7 @@ const (
  * command-line arguments so that the compilation can be configured in the same
  * way that the compiler is configured on the command line.
  *
- * \param CIdx The index object with which the translation unit will be 
+ * \param CIdx The index object with which the translation unit will be
  * associated.
  *
  * \param source_filename The name of the source file to load, or NULL if the
@@ -263,7 +263,7 @@ const (
  * \param command_line_args The command-line arguments that would be
  * passed to the \c clang executable if it were being invoked out-of-process.
  * These command-line options will be parsed and will affect how the translation
- * unit is parsed. Note that the following options are ignored: '-c', 
+ * unit is parsed. Note that the following options are ignored: '-c',
  * '-emit-ast', '-fsyntex-only' (which is the default), and '-o <output file>'.
  *
  * \param num_command_line_args The number of command-line arguments in
@@ -319,6 +319,10 @@ func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags
 // A single translation unit, which resides in an index
 type TranslationUnit struct {
 	c C.CXTranslationUnit
+}
+
+func (tu TranslationUnit) IsValid() bool {
+	return tu.c != nil
 }
 
 func (tu TranslationUnit) File(file_name string) File {
@@ -378,6 +382,48 @@ func (tu TranslationUnit) Cursor(loc SourceLocation) Cursor {
 }
 
 /**
+ * \brief Reparse the source files that produced this translation unit.
+ *
+ * This routine can be used to re-parse the source files that originally
+ * created the given translation unit, for example because those source files
+ * have changed (either on disk or as passed via \p unsaved_files). The
+ * source code will be reparsed with the same command-line options as it
+ * was originally parsed.
+ *
+ * Reparsing a translation unit invalidates all cursors and source locations
+ * that refer into that translation unit. This makes reparsing a translation
+ * unit semantically equivalent to destroying the translation unit and then
+ * creating a new translation unit with the same command-line arguments.
+ * However, it may be more efficient to reparse a translation
+ * unit using this routine.
+ *
+ * \param TU The translation unit whose contents will be re-parsed. The
+ * translation unit must originally have been built with
+ * \c clang_createTranslationUnitFromSourceFile().
+ *
+ * \param num_unsaved_files The number of unsaved file entries in \p
+ * unsaved_files.
+ *
+ * \param unsaved_files The files that have not yet been saved to disk
+ * but may be required for parsing, including the contents of
+ * those files.  The contents and name of these files (as specified by
+ * CXUnsavedFile) are copied when necessary, so the client only needs to
+ * guarantee their validity until the call to this function returns.
+ *
+ * \param options A bitset of options composed of the flags in CXReparse_Flags.
+ * The function \c clang_defaultReparseOptions() produces a default set of
+ * options recommended for most uses, based on the translation unit.
+ *
+ * \returns 0 if the sources could be reparsed. A non-zero value will be
+ * returned if reparsing was impossible, such that the translation unit is
+ * invalid. In such cases, the only valid call for \p TU is
+ * \c clang_disposeTranslationUnit(TU).
+ */
+func (tu TranslationUnit) Reparse(options TranslationUnitFlags) int {
+	return int(C.clang_reparseTranslationUnit(tu.c, C.uint(0), nil, C.uint(options)))
+}
+
+/**
  * \brief Saves a translation unit into a serialized representation of
  * that translation unit on disk.
  *
@@ -397,7 +443,7 @@ func (tu TranslationUnit) Cursor(loc SourceLocation) Cursor {
  * CXSaveTranslationUnit_XXX flags.
  *
  * \returns A value that will match one of the enumerators of the CXSaveError
- * enumeration. Zero (CXSaveError_None) indicates that the translation unit was 
+ * enumeration. Zero (CXSaveError_None) indicates that the translation unit was
  * saved successfully, while a non-zero value indicates that a problem occurred.
  */
 func (tu TranslationUnit) Save(fname string, options uint) uint32 {
@@ -434,8 +480,6 @@ func (c File) ModTime() time.Time {
 	const nsec = 0
 	return time.Unix(int64(sec), nsec)
 }
-
-
 
 // SourceLocation identifies a specific source location within a translation
 // unit.
@@ -518,16 +562,16 @@ func (r SourceRange) IsNull() bool {
 
 // ExpansionLocation returns the file, line, column, and offset represented by
 // the given source location.
-// 
+//
 // If the location refers into a macro expansion, retrieves the
 // location of the macro expansion.
 //
 // file: if non-NULL, will be set to the file to which the given
 // source location points.
-// 
+//
 // line: if non-NULL, will be set to the line to which the given
 // source location points.
-// 
+//
 // column: if non-NULL, will be set to the column to which the given
 // source location points.
 //
@@ -535,11 +579,11 @@ func (r SourceRange) IsNull() bool {
 // buffer to which the given source location points.
 func (l SourceLocation) ExpansionLocation() (f File, line, column, offset uint) {
 	cline := C.uint(0)
-	ccol  := C.uint(0)
-	coff  := C.uint(0)
+	ccol := C.uint(0)
+	coff := C.uint(0)
 	// FIXME: undefined reference to `clang_getExpansionLocation'
 	C.clang_getInstantiationLocation(l.c, &f.c, &cline, &ccol, &coff)
-	line  = uint(cline)
+	line = uint(cline)
 	column = uint(ccol)
 	offset = uint(coff)
 
