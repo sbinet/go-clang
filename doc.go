@@ -6,7 +6,7 @@
 //  const displayDiagnostics = 1
 //  idx := clang.NewIndex(excludeDeclarationsFromPCH, displayDiagnostics)
 //  defer idx.Dispose()
-//  
+//
 //  args := []string{}
 //  tu := idx.Parse("somefile.cxx", args)
 //  defer tu.Dispose()

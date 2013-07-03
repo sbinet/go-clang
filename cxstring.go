@@ -4,7 +4,7 @@ package clang
 // #include "clang-c/Index.h"
 import "C"
 import (
-	//"unsafe"
+//"unsafe"
 )
 
 // cxstring is a character string.

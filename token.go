@@ -11,15 +11,16 @@ import "C"
 
 // TokenKind describes a kind of token
 type TokenKind uint32
+
 const (
-  /**
-   * \brief A token that contains some kind of punctuation.
-   */
+	/**
+	 * \brief A token that contains some kind of punctuation.
+	 */
 	TK_Punctuation = C.CXToken_Punctuation
 
-  /**
-   * \brief A language keyword.
-   */
+	/**
+	 * \brief A language keyword.
+	 */
 	TK_Keyword = C.CXToken_Keyword
 
 	/**
@@ -104,8 +105,8 @@ func Tokenize(tu TranslationUnit, src SourceRange) Tokens {
 // an array of tokens
 type Tokens struct {
 	tu C.CXTranslationUnit
-	c *C.CXToken
-	n C.uint
+	c  *C.CXToken
+	n  C.uint
 }
 
 /**
@@ -142,7 +143,7 @@ func (t Tokens) Annotate() []Cursor {
 	c_cursors := make([]C.CXCursor, int(t.n))
 	C.clang_annotateTokens(t.tu, t.c, t.n, &c_cursors[0])
 	cursors := make([]Cursor, int(t.n))
-	for i,_ := range cursors {
+	for i, _ := range cursors {
 		cursors[i] = Cursor{C._go_clang_ocursor_at(&c_cursors[0], C.int(i))}
 	}
 	return cursors
@@ -154,6 +155,5 @@ func (t Tokens) Annotate() []Cursor {
 func (t Tokens) Dispose() {
 	C.clang_disposeTokens(t.tu, t.c, t.n)
 }
-
 
 // EOF

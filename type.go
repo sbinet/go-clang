@@ -109,7 +109,7 @@ func (t Type) CanonicalType() Type {
 	return Type{o}
 }
 
-// IsConstQualified determines whether a Type has the "const" qualifier set, 
+// IsConstQualified determines whether a Type has the "const" qualifier set,
 // without looking through typedefs that may have added "const" at a
 // different level.
 func (t Type) IsConstQualified() bool {
@@ -120,7 +120,7 @@ func (t Type) IsConstQualified() bool {
 	return false
 }
 
-// IsVolatileQualified determines whether a Type has the "volatile" qualifier 
+// IsVolatileQualified determines whether a Type has the "volatile" qualifier
 // set, without looking through typedefs that may have added "volatile" at a
 // different level.
 func (t Type) IsVolatileQualified() bool {
