@@ -1,12 +1,14 @@
-package clang
+package clang_test
 
 import (
 	"strings"
 	"testing"
+
+	"github.com/sbinet/go-clang"
 )
 
 func TestCompleteAt(t *testing.T) {
-	idx := NewIndex(0, 0)
+	idx := clang.NewIndex(0, 0)
 	defer idx.Dispose()
 	tu := idx.Parse("visitorwrap.c", nil, nil, 0)
 	if !tu.IsValid() {

@@ -1,11 +1,15 @@
-package clang
+package clang_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/sbinet/go-clang"
+)
 
 func TestReparse(t *testing.T) {
-	us := UnsavedFiles{"hello.cpp": "int world();"}
+	us := clang.UnsavedFiles{"hello.cpp": "int world();"}
 
-	idx := NewIndex(0, 0)
+	idx := clang.NewIndex(0, 0)
 	defer idx.Dispose()
 	tu := idx.Parse("hello.cpp", nil, us, 0)
 	if !tu.IsValid() {
@@ -13,12 +17,12 @@ func TestReparse(t *testing.T) {
 	}
 	defer tu.Dispose()
 	ok := false
-	tu.ToCursor().Visit(func(cursor, parent Cursor) ChildVisitResult {
+	tu.ToCursor().Visit(func(cursor, parent clang.Cursor) clang.ChildVisitResult {
 		if cursor.Spelling() == "world" {
 			ok = true
-			return CVR_Break
+			return clang.CVR_Break
 		}
-		return CVR_Continue
+		return clang.CVR_Continue
 	})
 	if !ok {
 		t.Error("Expected to find 'world', but didn't")
@@ -27,14 +31,14 @@ func TestReparse(t *testing.T) {
 	tu.Reparse(us, 0)
 
 	ok = false
-	tu.ToCursor().Visit(func(cursor, parent Cursor) ChildVisitResult {
+	tu.ToCursor().Visit(func(cursor, parent clang.Cursor) clang.ChildVisitResult {
 		if s := cursor.Spelling(); s == "world2" {
 			ok = true
-			return CVR_Break
+			return clang.CVR_Break
 		} else if s == "world" {
 			t.Errorf("'world' should no longer be part of the translationunit, but it still is")
 		}
-		return CVR_Continue
+		return clang.CVR_Continue
 	})
 	if !ok {
 		t.Error("Expected to find 'world2', but didn't")
