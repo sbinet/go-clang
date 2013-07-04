@@ -540,6 +540,23 @@ func (tu TranslationUnit) Save(fname string, options uint) uint32 {
 }
 
 /**
+ * \brief Retrieve a diagnostic associated with the given translation unit.
+ *
+ * \param Unit the translation unit to query.
+ * \param Index the zero-based diagnostic number to retrieve.
+ *
+ * \returns the requested diagnostic. This diagnostic must be freed
+ * via a call to \c clang_disposeDiagnostic().
+ */
+func (tu TranslationUnit) Diagnostics() (ret Diagnostics) {
+	ret = make(Diagnostics, C.clang_getNumDiagnostics(tu.c))
+	for i := range ret {
+		ret[i].c = C.clang_getDiagnostic(tu.c, C.uint(i))
+	}
+	return
+}
+
+/**
  * \brief Destroy the specified CXTranslationUnit object.
  */
 func (tu TranslationUnit) Dispose() {

@@ -5,7 +5,7 @@ import "testing"
 func TestReparse(t *testing.T) {
 	us := UnsavedFiles{"hello.cpp": "int world();"}
 
-	idx := NewIndex(0, 1)
+	idx := NewIndex(0, 0)
 	defer idx.Dispose()
 	tu := idx.Parse("hello.cpp", nil, us, 0)
 	if !tu.IsValid() {

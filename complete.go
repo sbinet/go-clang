@@ -430,6 +430,23 @@ func (ccr CodeCompleteResults) Dispose() {
 }
 
 /**
+ * \brief Retrieve a diagnostic associated with the given code completion.
+ *
+ * \param Results the code completion results to query.
+ * \param Index the zero-based diagnostic number to retrieve.
+ *
+ * \returns the requested diagnostic. This diagnostic must be freed
+ * via a call to \c clang_disposeDiagnostic().
+ */
+func (ccr CodeCompleteResults) Diagnostics() (ret Diagnostics) {
+	ret = make(Diagnostics, C.clang_codeCompleteGetNumDiagnostics(ccr.c))
+	for i := range ret {
+		ret[i].c = C.clang_codeCompleteGetDiagnostic(ccr.c, C.uint(i))
+	}
+	return
+}
+
+/**
  * \brief Flags that can be passed to \c clang_codeCompleteAt() to
  * modify its behavior.
  *
