@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCompleteAt(t *testing.T) {
+func TestDiagnostics(t *testing.T) {
 	idx := NewIndex(0, 0)
 	defer idx.Dispose()
 	tu := idx.Parse("visitorwrap.c", nil, nil, 0)
@@ -14,30 +14,16 @@ func TestCompleteAt(t *testing.T) {
 	}
 	defer tu.Dispose()
 
-	res := tu.CompleteAt("visitorwrap.c", 11, 16, nil, 0)
-	if !res.IsValid() {
-		t.Fatal("CompleteResults are not valid")
-	}
-	defer res.Dispose()
-	if n := len(res.Results()); n < 10 {
-		t.Errorf("Expected more results than %d", n)
-	}
-	t.Logf("%+v", res)
-	for _, r := range res.Results() {
-		t.Logf("%+v", r)
-		for _, c := range r.CompletionString.Chunks() {
-			t.Logf("\t%+v", c)
-		}
-	}
-
-	diags := res.Diagnostics()
+	diags := tu.Diagnostics()
 	defer diags.Dispose()
 	ok := false
 	for _, d := range diags {
 		if strings.Contains(d.Spelling(), "_cgo_export.h") {
 			ok = true
 		}
+		t.Log(d)
 		t.Log(d.Severity(), d.Spelling())
+		t.Log(d.Format(Diagnostic_DisplayCategoryName | Diagnostic_DisplaySourceLocation))
 	}
 	if !ok {
 		t.Errorf("Expected to find a diagnostic regarding _cgo_export.h")
