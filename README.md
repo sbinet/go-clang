@@ -2,6 +2,8 @@ go-clang
 ========
 
 [![Build Status](https://secure.travis-ci.org/sbinet/go-clang.png)](http://travis-ci.org/sbinet/go-clang)
+[![Build Status](https://drone.io/github.com/sbinet/go-clang/status.png)](https://drone.io/github.com/sbinet/go-clang/latest)
+
 
 Naive Go bindings to the C-API of ``CLang``.
 
