@@ -1,20 +1,27 @@
 package clang
 
 import (
-	"strings"
 	"testing"
 )
 
-func TestCompleteAt(t *testing.T) {
+func TestUnsavedFiles(t *testing.T) {
+	us := UnsavedFiles{"hello.cpp": `
+#include <stdio.h>
+int main(int argc, char **argv) {
+	printf("Hello world!\n");
+	return 0;
+}
+`}
+
 	idx := NewIndex(0, 0)
 	defer idx.Dispose()
-	tu := idx.Parse("visitorwrap.c", nil, nil, 0)
+	tu := idx.Parse("hello.cpp", nil, us, 0)
 	if !tu.IsValid() {
 		t.Fatal("TranslationUnit is not valid")
 	}
 	defer tu.Dispose()
 
-	res := tu.CompleteAt("visitorwrap.c", 11, 16, nil, 0)
+	res := tu.CompleteAt("hello.cpp", 4, 1, us, 0)
 	if !res.IsValid() {
 		t.Fatal("CompleteResults are not valid")
 	}
@@ -28,18 +35,5 @@ func TestCompleteAt(t *testing.T) {
 		for _, c := range r.CompletionString.Chunks() {
 			t.Logf("\t%+v", c)
 		}
-	}
-
-	diags := res.Diagnostics()
-	defer diags.Dispose()
-	ok := false
-	for _, d := range diags {
-		if strings.Contains(d.Spelling(), "_cgo_export.h") {
-			ok = true
-		}
-		t.Log(d.Severity(), d.Spelling())
-	}
-	if !ok {
-		t.Errorf("Expected to find a diagnostic regarding _cgo_export.h")
 	}
 }
