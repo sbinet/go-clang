@@ -60,7 +60,7 @@ func main() {
 		copy(args, flag.Args()[nidx:])
 	}
 
-	tu := idx.Parse(*fname, args, 0)
+	tu := idx.Parse(*fname, args, nil, 0)
 
 	defer tu.Dispose()
 

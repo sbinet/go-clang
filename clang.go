@@ -143,9 +143,12 @@ func (idx Index) CreateTranslationUnit(fname string) TranslationUnit {
  * CXUnsavedFile) are copied when necessary, so the client only needs to
  * guarantee their validity until the call to this function returns.
  */
-//FIXME: handle unsaved-files
-func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string) TranslationUnit {
-	var c_fname *C.char = nil
+func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string, us UnsavedFiles) TranslationUnit {
+	var (
+		c_fname *C.char = nil
+		c_us            = us.to_c()
+	)
+	defer c_us.Dispose()
 	if fname != "" {
 		c_fname = C.CString(fname)
 	}
@@ -163,7 +166,7 @@ func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string
 		idx.c,
 		c_fname,
 		c_nargs, &c_cmds[0],
-		C.uint(0), nil)
+		C.uint(len(c_us)), c_us.ptr())
 	return TranslationUnit{o}
 
 }
@@ -286,9 +289,12 @@ const (
  * any diagnostics produced by the compiler. If there is a failure from which
  * the compiler cannot recover, returns NULL.
  */
-//FIXME: handle unsaved-files
-func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags) TranslationUnit {
-	var c_fname *C.char = nil
+func (idx Index) Parse(fname string, args []string, us UnsavedFiles, options TranslationUnitFlags) TranslationUnit {
+	var (
+		c_fname *C.char = nil
+		c_us            = us.to_c()
+	)
+	defer c_us.Dispose()
 	if fname != "" {
 		c_fname = C.CString(fname)
 	}
@@ -310,7 +316,7 @@ func (idx Index) Parse(fname string, args []string, options TranslationUnitFlags
 		idx.c,
 		c_fname,
 		c_args, c_nargs,
-		nil, C.uint(0),
+		c_us.ptr(), C.uint(len(c_us)),
 		C.uint(options))
 	return TranslationUnit{o}
 
@@ -389,11 +395,12 @@ type TranslationUnit struct {
  * freed with \c clang_disposeCodeCompleteResults(). If code
  * completion fails, returns NULL.
  */
-// TODO(): Implement CXUnsavedFile support
-func (tu TranslationUnit) CompleteAt(complete_filename string, complete_line, complete_column int, options CodeCompleteFlags) CodeCompleteResults {
+func (tu TranslationUnit) CompleteAt(complete_filename string, complete_line, complete_column int, us UnsavedFiles, options CodeCompleteFlags) CodeCompleteResults {
 	cfname := C.CString(complete_filename)
 	defer C.free(unsafe.Pointer(cfname))
-	cr := C.clang_codeCompleteAt(tu.c, cfname, C.uint(complete_line), C.uint(complete_column), nil, C.uint(0), C.uint(options))
+	c_us := us.to_c()
+	defer c_us.Dispose()
+	cr := C.clang_codeCompleteAt(tu.c, cfname, C.uint(complete_line), C.uint(complete_column), c_us.ptr(), C.uint(len(c_us)), C.uint(options))
 	return CodeCompleteResults{cr}
 }
 
@@ -495,8 +502,10 @@ func (tu TranslationUnit) Cursor(loc SourceLocation) Cursor {
  * invalid. In such cases, the only valid call for \p TU is
  * \c clang_disposeTranslationUnit(TU).
  */
-func (tu TranslationUnit) Reparse(options TranslationUnitFlags) int {
-	return int(C.clang_reparseTranslationUnit(tu.c, C.uint(0), nil, C.uint(options)))
+func (tu TranslationUnit) Reparse(us UnsavedFiles, options TranslationUnitFlags) int {
+	c_us := us.to_c()
+	defer c_us.Dispose()
+	return int(C.clang_reparseTranslationUnit(tu.c, C.uint(len(c_us)), c_us.ptr(), C.uint(options)))
 }
 
 /**

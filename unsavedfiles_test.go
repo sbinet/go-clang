@@ -4,16 +4,24 @@ import (
 	"testing"
 )
 
-func TestCompleteAt(t *testing.T) {
+func TestUnsavedFiles(t *testing.T) {
+	us := UnsavedFiles{"hello.cpp": `
+#include <stdio.h>
+int main(int argc, char **argv) {
+	printf("Hello world!\n");
+	return 0;
+}
+`}
+
 	idx := NewIndex(0, 1)
 	defer idx.Dispose()
-	tu := idx.Parse("visitorwrap.c", nil, nil, 0)
+	tu := idx.Parse("hello.cpp", nil, us, 0)
 	if !tu.IsValid() {
 		t.Fatal("TranslationUnit is not valid")
 	}
 	defer tu.Dispose()
 
-	res := tu.CompleteAt("visitorwrap.c", 11, 16, nil, 0)
+	res := tu.CompleteAt("hello.cpp", 4, 1, us, 0)
 	if !res.IsValid() {
 		t.Fatal("CompleteResults are not valid")
 	}
