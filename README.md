@@ -115,7 +115,7 @@ Limitations
 Documentation
 -------------
 
-Is provided thru ``gopkg``:
+Is available at ``godoc``:
 
- http://godoc.org/pkg/github.com/sbinet/go-clang
+ http://godoc.org/github.com/sbinet/go-clang
 
