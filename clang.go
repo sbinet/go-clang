@@ -38,6 +38,20 @@ const (
 	NotAccessible AvailabilityKind = C.CXAvailability_NotAccessible
 )
 
+func (ak AvailabilityKind) String() string {
+	switch ak {
+	case Available:
+		return "Available"
+	case Deprecated:
+		return "Deprecated"
+	case NotAvailable:
+		return "NotAvailable"
+	case NotAccessible:
+		return "NotAccessible"
+	}
+	return ""
+}
+
 // An "index" that consists of a set of translation units that would
 // typically be linked together into an executable or library
 type Index struct {
@@ -162,10 +176,15 @@ func (idx Index) CreateTranslationUnitFromSourceFile(fname string, args []string
 		c_cmds[i] = cstr
 	}
 
+	var c_argv **C.char = nil
+	if c_nargs > 0 {
+		c_argv = &c_cmds[0]
+	}
+
 	o := C.clang_createTranslationUnitFromSourceFile(
 		idx.c,
 		c_fname,
-		c_nargs, &c_cmds[0],
+		c_nargs, c_argv,
 		C.uint(len(c_us)), c_us.ptr())
 	return TranslationUnit{o}
 
