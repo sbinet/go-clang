@@ -162,6 +162,9 @@ type Tokens struct {
  */
 func (t Tokens) Annotate() []Cursor {
 	c_cursors := make([]C.CXCursor, int(t.n))
+	if t.n <= 0 {
+		return cursors
+	}
 	C.clang_annotateTokens(t.tu, t.c, t.n, &c_cursors[0])
 	cursors := make([]Cursor, int(t.n))
 	for i, _ := range cursors {
