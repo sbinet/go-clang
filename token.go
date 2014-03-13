@@ -9,6 +9,11 @@ package clang
 // }
 import "C"
 
+import (
+	"reflect"
+	"unsafe"
+)
+
 // TokenKind describes a kind of token
 type TokenKind uint32
 
@@ -99,14 +104,25 @@ func Tokenize(tu TranslationUnit, src SourceRange) Tokens {
 	tokens := Tokens{}
 	tokens.tu = tu.c
 	C.clang_tokenize(tu.c, src.c, &tokens.c, &tokens.n)
+
+	var ctokens []C.CXToken
+	h := (*reflect.SliceHeader)(unsafe.Pointer(&ctokens))
+	h.Data = uintptr(unsafe.Pointer(tokens.c))
+	h.Len = int(tokens.n)
+	h.Cap = int(tokens.n)
+
+	for _, ct := range ctokens {
+		tokens.Tokens = append(tokens.Tokens, Token{ct})
+	}
 	return tokens
 }
 
 // an array of tokens
 type Tokens struct {
-	tu C.CXTranslationUnit
-	c  *C.CXToken
-	n  C.uint
+	Tokens []Token
+	tu     C.CXTranslationUnit
+	c      *C.CXToken
+	n      C.uint
 }
 
 /**
