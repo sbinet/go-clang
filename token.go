@@ -9,6 +9,10 @@ package clang
 // }
 import "C"
 
+import (
+	"fmt"
+)
+
 // TokenKind describes a kind of token
 type TokenKind uint32
 
@@ -38,6 +42,23 @@ const (
 	 */
 	TK_Comment = C.CXToken_Comment
 )
+
+func (tk TokenKind) String() string {
+	switch tk {
+	case TK_Punctuation:
+		return "Punctuation"
+	case TK_Keyword:
+		return "Keyword"
+	case TK_Identifier:
+		return "Identifier"
+	case TK_Literal:
+		return "Literal"
+	case TK_Comment:
+		return "Comment"
+	default:
+		panic(fmt.Errorf("clang: invalid TokenKind value (%d)", uint32(tk)))
+	}
+}
 
 // Token is a single preprocessing token.
 type Token struct {
