@@ -161,12 +161,12 @@ type Tokens struct {
  * replaced with the cursors corresponding to each token.
  */
 func (t Tokens) Annotate() []Cursor {
-	c_cursors := make([]C.CXCursor, int(t.n))
+	cursors := make([]Cursor, int(t.n))
 	if t.n <= 0 {
 		return cursors
 	}
+	c_cursors := make([]C.CXCursor, int(t.n))
 	C.clang_annotateTokens(t.tu, t.c, t.n, &c_cursors[0])
-	cursors := make([]Cursor, int(t.n))
 	for i, _ := range cursors {
 		cursors[i] = Cursor{C._go_clang_ocursor_at(&c_cursors[0], C.int(i))}
 	}
