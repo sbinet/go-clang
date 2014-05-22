@@ -1236,4 +1236,24 @@ const (
 	NR_WantSinglePiece = C.CXNameRange_WantSinglePiece
 )
 
+// TODO
+//
+// /**
+//  * \brief Find references of a declaration in a specific file.
+//  *
+//  * \param cursor pointing to a declaration or a reference of one.
+//  *
+//  * \param file to search for references.
+//  *
+//  * \param visitor callback that will receive pairs of CXCursor/CXSourceRange for
+//  * each reference found.
+//  * The CXSourceRange will point inside the file; if the reference is inside
+//  * a macro (and not a macro argument) the CXSourceRange will be invalid.
+//  *
+//  * \returns one of the CXResult enumerators.
+//  */
+// func (c Cursor) FindReferencesInFile(f File, visitor CursorAndRangeVisitor) Result {
+// 	return Result(C.clang_findReferencesInFile(c.c, f.c, visitor.c))
+// }
+
 // EOF
