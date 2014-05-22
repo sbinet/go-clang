@@ -1055,6 +1055,15 @@ func (c Cursor) BriefCommentText() string {
 }
 
 /**
+ * \brief Given a cursor that represents a documentable entity (e.g.,
+ * declaration), return the associated parsed comment as a
+ * \c CXComment_FullComment AST node.
+ */
+func (c Cursor) ParsedComment() Comment {
+	return Comment{C.clang_Cursor_getParsedComment(c.c)}
+}
+
+/**
  * \defgroup CINDEX_CPP C++ AST introspection
  *
  * The routines in this group provide access information in the ASTs specific
