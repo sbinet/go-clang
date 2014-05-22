@@ -587,6 +587,10 @@ const (
 	 */
 	CK_SEHFinallyStmt = C.CXCursor_SEHFinallyStmt
 
+	/** \brief A MS inline assembly statement extension.
+	 */
+	CK_MSAsmStmt = C.CXCursor_MSAsmStmt
+
 	/** \brief The null satement ";": C99 6.8.3p3.
 	 *
 	 * This cursor kind is used to describe the null statement.
@@ -597,6 +601,10 @@ const (
 	 * expressions.
 	 */
 	CK_DeclStmt = C.CXCursor_DeclStmt
+
+	/** \brief OpenMP parallel directive.
+	 */
+	CK_OMPParallelDirective = C.CXCursor_OMPParallelDirective
 
 	CK_LastStmt = C.CXCursor_LastStmt
 
@@ -632,6 +640,14 @@ const (
 	CK_InclusionDirective     = C.CXCursor_InclusionDirective
 	CK_FirstPreprocessing     = C.CXCursor_FirstPreprocessing
 	CK_LastPreprocessing      = C.CXCursor_LastPreprocessing
+
+	/* Extra Declarations */
+	/**
+	 * \brief A module import declaration.
+	 */
+	CK_ModuleImportDecl = C.CXCursor_ModuleImportDecl
+	CK_FirstExtraDecl   = C.CXCursor_FirstExtraDecl
+	CK_LastExtraDecl    = C.CXCursor_LastExtraDecl
 )
 
 func (c CursorKind) to_c() uint32 {
