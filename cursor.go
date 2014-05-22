@@ -986,6 +986,33 @@ func (c Cursor) ReceiverType() Type {
 	return Type{C.clang_Cursor_getReceiverType(c.c)}
 }
 
+// TODO: objective-c support
+// /**
+//  * \brief Given a cursor that represents a property declaration, return the
+//  * associated property attributes. The bits are formed from
+//  * \c CXObjCPropertyAttrKind.
+//  *
+//  * \param reserved Reserved for future use, pass 0.
+//  */
+// CINDEX_LINKAGE unsigned clang_Cursor_getObjCPropertyAttributes(CXCursor C,
+//                                                              unsigned reserved);
+
+// TODO: objective-c support
+// /**
+//  * \brief Given a cursor that represents an ObjC method or parameter
+//  * declaration, return the associated ObjC qualifiers for the return type or the
+//  * parameter respectively. The bits are formed from CXObjCDeclQualifierKind.
+//  */
+// CINDEX_LINKAGE unsigned clang_Cursor_getObjCDeclQualifiers(CXCursor C);
+
+// TODO: objective-c support
+// /**
+//  * \brief Given a cursor that represents an ObjC method or property declaration,
+//  * return non-zero if the declaration was affected by "@optional".
+//  * Returns zero if the cursor is not such a declaration or it is "@required".
+//  */
+// CINDEX_LINKAGE unsigned clang_Cursor_isObjCOptional(CXCursor C);
+
 /**
  * \brief Given a cursor that represents a declaration, return the associated
  * comment text, including comment markers.
