@@ -283,3 +283,21 @@ func (tu TranslationUnit) NumTopLevelHeaders(m Module) int {
 func (tu TranslationUnit) TopLevelHeader(m Module, i int) File {
 	return File{C.clang_Module_getTopLevelHeader(tu.c, m.c, C.unsigned(i))}
 }
+
+// TODO
+//
+// /**
+//  * \brief Find #import/#include directives in a specific file.
+//  *
+//  * \param TU translation unit containing the file to query.
+//  *
+//  * \param file to search for #import/#include directives.
+//  *
+//  * \param visitor callback that will receive pairs of CXCursor/CXSourceRange for
+//  * each directive found.
+//  *
+//  * \returns one of the CXResult enumerators.
+//  */
+// CINDEX_LINKAGE CXResult clang_findIncludesInFile(CXTranslationUnit TU,
+//                                                  CXFile file,
+//                                               CXCursorAndRangeVisitor visitor);
