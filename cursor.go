@@ -1026,6 +1026,15 @@ func (c Cursor) IsVariadic() bool {
 
 /**
  * \brief Given a cursor that represents a declaration, return the associated
+ * comment's source range.  The range may include multiple consecutive comments
+ * with whitespace in between.
+ */
+func (c Cursor) CommentRange() SourceRange {
+	return SourceRange{C.clang_Cursor_getCommentRange(c.c)}
+}
+
+/**
+ * \brief Given a cursor that represents a declaration, return the associated
  * comment text, including comment markers.
  */
 func (c Cursor) RawCommentText() string {
