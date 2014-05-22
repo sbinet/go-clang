@@ -5,13 +5,15 @@ package clang
 // #include "go-clang.h"
 //
 import "C"
-import
+
+import (
+	"fmt"
+)
 
 /**
  * \brief Uniquely identifies a CXFile, that refers to the same underlying file,
  * across an indexing session.
- */"fmt"
-
+ */
 type FileUniqueID struct {
 	c C.CXFileUniqueID
 }
