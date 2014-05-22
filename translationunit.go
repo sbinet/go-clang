@@ -263,3 +263,23 @@ func (tu TranslationUnit) LocationForOffset(f File, offset uint) SourceLocation 
 	loc := C.clang_getLocationForOffset(tu.c, f.c, C.uint(offset))
 	return SourceLocation{loc}
 }
+
+/**
+ * \param Module a module object.
+ *
+ * \returns the number of top level headers associated with this module.
+ */
+func (tu TranslationUnit) NumTopLevelHeaders(m Module) int {
+	return int(C.clang_Module_getNumTopLevelHeaders(tu.c, m.c))
+}
+
+/**
+ * \param Module a module object.
+ *
+ * \param Index top level header index (zero-based).
+ *
+ * \returns the specified top level header associated with the module.
+ */
+func (tu TranslationUnit) TopLevelHeader(m Module, i int) File {
+	return File{C.clang_Module_getTopLevelHeader(tu.c, m.c, C.unsigned(i))}
+}

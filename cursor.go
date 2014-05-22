@@ -1064,6 +1064,13 @@ func (c Cursor) ParsedComment() Comment {
 }
 
 /**
+ * \brief Given a CXCursor_ModuleImportDecl cursor, return the associated module.
+ */
+func (c Cursor) Module() Module {
+	return Module{C.clang_Cursor_getModule(c.c)}
+}
+
+/**
  * \defgroup CINDEX_CPP C++ AST introspection
  *
  * The routines in this group provide access information in the ASTs specific
