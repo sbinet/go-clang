@@ -530,6 +530,11 @@ const (
 	 */
 	CK_ReturnStmt = C.CXCursor_ReturnStmt
 
+	/** \brief A GCC inline assembly statement extension.
+	 */
+	CK_GCCAsmStmt = C.CXCursor_GCCAsmStmt
+	CK_AsmStmt    = CK_GCCAsmStmt
+
 	/** \brief Objective-C's overall @try-@catc-@finall statement.
 	 */
 	CK_ObjCAtTryStmt = C.CXCursor_ObjCAtTryStmt
