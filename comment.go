@@ -70,3 +70,14 @@ func (c Comment) HasTrailingNewline() bool {
 	}
 	return false
 }
+
+/**
+ * \param Comment a \c CXComment_Text AST node.
+ *
+ * \returns text contained in the AST node.
+ */
+func (c Comment) TextComment() string {
+	o := cxstring{C.clang_TextComment_getText(c.c)}
+	defer o.Dispose()
+	return o.String()
+}
