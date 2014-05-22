@@ -649,6 +649,18 @@ func (c Cursor) ResultType() Type {
 }
 
 /**
+ * \brief Returns non-zero if the cursor specifies a Record member that is a
+ *   bitfield.
+ */
+func (c Cursor) IsBitField() bool {
+	o := C.clang_Cursor_isBitField(c.c)
+	if o != 0 {
+		return true
+	}
+	return false
+}
+
+/**
  * \brief Returns 1 if the base class specified by the cursor with kind
  *   CX_CXXBaseSpecifier is virtual.
  */
