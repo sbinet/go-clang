@@ -607,6 +607,15 @@ func (c Cursor) EnumConstantDeclUnsignedValue() uint64 {
 }
 
 /**
+ * \brief Retrieve the bit width of a bit field declaration as an integer.
+ *
+ * If a cursor that is not a bit field declaration is passed in, -1 is returned.
+ */
+func (c Cursor) FieldDeclBitWidth() int {
+	return int(C.clang_getFieldDeclBitWidth(c.c))
+}
+
+/**
  * \brief Retrieve the number of non-variadic arguments associated with a given
  * cursor.
  *
