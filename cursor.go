@@ -1256,4 +1256,10 @@ const (
 // 	return Result(C.clang_findReferencesInFile(c.c, f.c, visitor.c))
 // }
 
+// TODO
+//
+// CINDEX_LINKAGE
+// CXResult clang_findReferencesInFileWithBlock(CXCursor, CXFile,
+//                                              CXCursorAndRangeVisitorBlock);
+
 // EOF
