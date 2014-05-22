@@ -960,6 +960,25 @@ func (c Cursor) CanonicalCursor() Cursor {
 }
 
 /**
+ * \brief Given a cursor pointing to a C++ method call or an ObjC message,
+ * returns non-zero if the method/message is "dynamic", meaning:
+ *
+ * For a C++ method: the call is virtual.
+ * For an ObjC message: the receiver is an object instance, not 'super' or a
+ * specific class.
+ *
+ * If the method/message is "static" or the cursor does not point to a
+ * method/message, it will return zero.
+ */
+func (c Cursor) IsDynamicCall() bool {
+	o := C.clang_Cursor_isDynamicCall(c.c)
+	if o != 0 {
+		return true
+	}
+	return false
+}
+
+/**
  * \brief Given a cursor that represents a declaration, return the associated
  * comment text, including comment markers.
  */
