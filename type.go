@@ -208,4 +208,14 @@ func (t Type) OffsetOf(s string) (int, error) {
 	return int(o), nil
 }
 
+/**
+ * \brief Retrieve the ref-qualifier kind of a function or method.
+ *
+ * The ref-qualifier is returned for C++ functions or methods. For other types
+ * or non-C++ declarations, CXRefQualifier_None is returned.
+ */
+func (t Type) CXXRefQualifier() RefQualifierKind {
+	return RefQualifierKind(C.clang_Type_getCXXRefQualifier(t.c))
+}
+
 // EOF
