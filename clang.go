@@ -3,8 +3,8 @@ package clang
 // #include <stdlib.h>
 // #include "clang-c/Index.h"
 import "C"
+
 import (
-	"time"
 	"unsafe"
 )
 
@@ -580,26 +580,6 @@ func (tu TranslationUnit) Diagnostics() (ret Diagnostics) {
  */
 func (tu TranslationUnit) Dispose() {
 	C.clang_disposeTranslationUnit(tu.c)
-}
-
-// A particular source file that is part of a translation unit.
-type File struct {
-	c C.CXFile
-}
-
-// Name retrieves the complete file and path name of the given file.
-func (c File) Name() string {
-	cstr := cxstring{C.clang_getFileName(c.c)}
-	defer cstr.Dispose()
-	return cstr.String()
-}
-
-// ModTime retrieves the last modification time of the given file.
-func (c File) ModTime() time.Time {
-	// time_t is in seconds since epoch
-	sec := C.clang_getFileTime(c.c)
-	const nsec = 0
-	return time.Unix(int64(sec), nsec)
 }
 
 // SourceLocation identifies a specific source location within a translation
