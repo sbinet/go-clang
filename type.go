@@ -27,6 +27,18 @@ func EqualTypes(t1, t2 Type) bool {
 	return false
 }
 
+/**
+ * \brief Pretty-print the underlying type using the rules of the
+ * language of the translation unit from which it came.
+ *
+ * If the type is invalid, an empty string is returned.
+ */
+func (t Type) TypeSpelling() string {
+	o := cxstring{C.clang_getTypeSpelling(t.c)}
+	defer o.Dispose()
+	return o.String()
+}
+
 // CanonicalType returns the canonical type for a Type.
 //
 // Clang's type system explicitly models typedefs and all the ways
