@@ -979,6 +979,14 @@ func (c Cursor) IsDynamicCall() bool {
 }
 
 /**
+ * \brief Given a cursor pointing to an ObjC message, returns the CXType of the
+ * receiver.
+ */
+func (c Cursor) ReceiverType() Type {
+	return Type{C.clang_Cursor_getReceiverType(c.c)}
+}
+
+/**
  * \brief Given a cursor that represents a declaration, return the associated
  * comment text, including comment markers.
  */
