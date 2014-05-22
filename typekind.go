@@ -47,19 +47,24 @@ const (
 	TK_FirstBuiltin = C.CXType_FirstBuiltin
 	TK_LastBuiltin  = C.CXType_LastBuiltin
 
-	TK_Complex           = C.CXType_Complex
-	TK_Pointer           = C.CXType_Pointer
-	TK_BlockPointer      = C.CXType_BlockPointer
-	TK_LValueReference   = C.CXType_LValueReference
-	TK_RValueReference   = C.CXType_RValueReference
-	TK_Record            = C.CXType_Record
-	TK_Enum              = C.CXType_Enum
-	TK_Typedef           = C.CXType_Typedef
-	TK_ObjCInterface     = C.CXType_ObjCInterface
-	TK_ObjCObjectPointer = C.CXType_ObjCObjectPointer
-	TK_FunctionNoProto   = C.CXType_FunctionNoProto
-	TK_FunctionProto     = C.CXType_FunctionProto
-	TK_ConstantArray     = C.CXType_ConstantArray
+	TK_Complex             = C.CXType_Complex
+	TK_Pointer             = C.CXType_Pointer
+	TK_BlockPointer        = C.CXType_BlockPointer
+	TK_LValueReference     = C.CXType_LValueReference
+	TK_RValueReference     = C.CXType_RValueReference
+	TK_Record              = C.CXType_Record
+	TK_Enum                = C.CXType_Enum
+	TK_Typedef             = C.CXType_Typedef
+	TK_ObjCInterface       = C.CXType_ObjCInterface
+	TK_ObjCObjectPointer   = C.CXType_ObjCObjectPointer
+	TK_FunctionNoProto     = C.CXType_FunctionNoProto
+	TK_FunctionProto       = C.CXType_FunctionProto
+	TK_ConstantArray       = C.CXType_ConstantArray
+	TK_Vector              = C.CXType_Vector
+	TK_IncompleteArray     = C.CXType_IncompleteArray
+	TK_VariableArray       = C.CXType_VariableArray
+	TK_DependentSizedArray = C.CXType_DependentSizedArray
+	TK_MemberPointer       = C.CXType_MemberPointer
 )
 
 func (t TypeKind) to_c() uint32 {
