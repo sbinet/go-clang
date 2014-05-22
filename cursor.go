@@ -1097,7 +1097,7 @@ func (c Cursor) CXXMethod_IsPureVirtual() bool {
  */
 func (c Cursor) CXXMethod_IsStatic() bool {
 	o := C.clang_CXXMethod_isStatic(c.c)
-	if o != C.uint(0) {
+	if o != 0 {
 		return true
 	}
 	return false
@@ -1110,7 +1110,7 @@ func (c Cursor) CXXMethod_IsStatic() bool {
  */
 func (c Cursor) CXXMethod_IsVirtual() bool {
 	o := C.clang_CXXMethod_isVirtual(c.c)
-	if o != C.uint(0) {
+	if o != 0 {
 		return true
 	}
 	return false
