@@ -27,7 +27,7 @@ type PlatformAvailability struct {
  */
 func (p *PlatformAvailability) Platform() string {
 	o := cxstring{p.c.Platform}
-	defer o.Dispose()
+	//defer o.Dispose() // done by PlatformAvailability.Dispose()
 	return o.String()
 }
 
@@ -70,7 +70,7 @@ func (p *PlatformAvailability) Unavailable() int {
  */
 func (p *PlatformAvailability) Message() string {
 	o := cxstring{p.c.Message}
-	defer o.Dispose()
+	//defer o.Dispose() // done by PlatformAvailability.Dispose()
 	return o.String()
 }
 
