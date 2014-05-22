@@ -198,3 +198,42 @@ func (l SourceLocation) SpellingLocation() (file File, line, column, offset uint
 	offset = uint(coff)
 	return
 }
+
+/**
+ * \brief Retrieve the file, line, column, and offset represented by
+ * the given source location.
+ *
+ * If the location refers into a macro expansion, return where the macro was
+ * expanded or where the macro argument was written, if the location points at
+ * a macro argument.
+ *
+ * \param location the location within a source file that will be decomposed
+ * into its parts.
+ *
+ * \param file [out] if non-NULL, will be set to the file to which the given
+ * source location points.
+ *
+ * \param line [out] if non-NULL, will be set to the line to which the given
+ * source location points.
+ *
+ * \param column [out] if non-NULL, will be set to the column to which the given
+ * source location points.
+ *
+ * \param offset [out] if non-NULL, will be set to the offset into the
+ * buffer to which the given source location points.
+ */
+func (loc SourceLocation) GetFileLocation() (f File, line, column, offset uint) {
+	cline := C.uint(0)
+	ccol := C.uint(0)
+	coff := C.uint(0)
+	C.clang_getFileLocation(loc.c,
+		&f.c,
+		&cline,
+		&ccol,
+		&coff)
+	line = uint(cline)
+	column = uint(ccol)
+	offset = uint(coff)
+	return
+
+}
