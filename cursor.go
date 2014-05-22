@@ -1014,6 +1014,17 @@ func (c Cursor) ReceiverType() Type {
 // CINDEX_LINKAGE unsigned clang_Cursor_isObjCOptional(CXCursor C);
 
 /**
+ * \brief Returns non-zero if the given cursor is a variadic function or method.
+ */
+func (c Cursor) IsVariadic() bool {
+	o := C.clang_Cursor_isVariadic(c.c)
+	if o != 0 {
+		return true
+	}
+	return false
+}
+
+/**
  * \brief Given a cursor that represents a declaration, return the associated
  * comment text, including comment markers.
  */
