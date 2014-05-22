@@ -2,6 +2,12 @@ package clang
 
 // #include <stdlib.h>
 // #include "clang-c/Index.h"
+// #include "go-clang.h"
+//
+// CXPlatformAvailability
+// _goclang_get_platform_availability_at(CXPlatformAvailability* array, int idx) {
+//   return array[idx];
+// }
 //
 import "C"
 
