@@ -1081,6 +1081,18 @@ func (c Cursor) Module() Module {
 
 /**
  * \brief Determine if a C++ member function or member function template is
+ * pure virtual.
+ */
+func (c Cursor) CXXMethod_IsPureVirtual() bool {
+	o := C.clang_CXXMethod_isPureVirtual(c.c)
+	if o != 0 {
+		return true
+	}
+	return false
+}
+
+/**
+ * \brief Determine if a C++ member function or member function template is
  * declared 'static'.
  */
 func (c Cursor) CXXMethod_IsStatic() bool {
