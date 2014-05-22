@@ -443,6 +443,10 @@ const (
 	 */
 	CK_SizeOfPackExpr = C.CXCursor_SizeOfPackExpr
 
+	/** \brief Represents the "self" expression in a ObjC method.
+	 */
+	CK_ObjCSelfExpr = C.CXCursor_ObjCSelfExpr
+
 	CK_LastExpr = C.CXCursor_LastExpr
 
 	/* Statements */
