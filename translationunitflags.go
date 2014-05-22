@@ -72,10 +72,35 @@ const (
 	TU_CacheCompletionResults = C.CXTranslationUnit_CacheCompletionResults
 
 	/**
+	 * \brief Used to indicate that the translation unit will be serialized with
+	 * \c clang_saveTranslationUnit.
+	 *
+	 * This option is typically used when parsing a header with the intent of
+	 * producing a precompiled header.
+	 */
+	TU_ForSerialization = C.CXTranslationUnit_ForSerialization
+
+	/**
 	 * \brief DEPRECATED: Enabled chained precompiled preambles in C++.
 	 *
 	 * Note: this is a *temporary* option that is available only while
 	 * we are testing C++ precompiled preamble support. It is deprecated.
 	 */
 	TU_CXXChainedPCH = C.CXTranslationUnit_CXXChainedPCH
+
+	/**
+	 * \brief Used to indicate that function/method bodies should be skipped while
+	 * parsing.
+	 *
+	 * This option can be used to search for declarations/definitions while
+	 * ignoring the usages.
+	 */
+	TU_SkipFunctionBodies = C.CXTranslationUnit_SkipFunctionBodies
+
+	/**
+	 * \brief Used to indicate that brief documentation comments should be
+	 * included into the set of code completions returned from this translation
+	 * unit.
+	 */
+	TU_IncludeBriefCommentsInCodeCompletion = C.CXTranslationUnit_IncludeBriefCommentsInCodeCompletion
 )
