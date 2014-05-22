@@ -8,9 +8,6 @@ package clang
 // }
 //
 import "C"
-import (
-//"unsafe"
-)
 
 /**
  * \brief Describes the kind of entity that a cursor refers to.
