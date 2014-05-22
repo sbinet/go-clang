@@ -301,3 +301,9 @@ func (tu TranslationUnit) TopLevelHeader(m Module, i int) File {
 // CINDEX_LINKAGE CXResult clang_findIncludesInFile(CXTranslationUnit TU,
 //                                                  CXFile file,
 //                                               CXCursorAndRangeVisitor visitor);
+
+// TODO
+//
+// CINDEX_LINKAGE
+// CXResult clang_findIncludesInFileWithBlock(CXTranslationUnit, CXFile,
+//                                            CXCursorAndRangeVisitorBlock);
