@@ -17,6 +17,7 @@
 #define CLANG_C_INDEX_H
 
 #include <time.h>
+#include <stdint.h> /* go-clang: for uintptr_t */
 
 #include "clang-c/Platform.h"
 #include "clang-c/CXErrorCode.h"
@@ -2269,7 +2270,7 @@ enum CXCursorKind {
 typedef struct {
   enum CXCursorKind kind;
   int xdata;
-  const void *data[3];
+  uintptr_t data[3];
 } CXCursor;
 
 /**
@@ -2834,7 +2835,7 @@ enum CXCallingConv {
  */
 typedef struct {
   enum CXTypeKind kind;
-  void *data[2];
+  uintptr_t data[2];
 } CXType;
 
 /**
