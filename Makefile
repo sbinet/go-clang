@@ -1,14 +1,27 @@
 ## simple makefile to log workflow
-.PHONY: all test clean build
+.PHONY: all test clean build install
 
-all: build test
-	@echo "## bye."
+GOFLAGS ?= $(GOFLAGS:)
+
+all: install test
+
 
 build:
-	@echo "build github.com/sbinet/go-clang"
-	@go get -v ./...
+	@go build $(GOFLAGS) ./...
 
-test: build
-	@go test
+install:
+	@go get $(GOFLAGS) ./...
+
+gen:
+	@go generate $(GOFLAGS) ./...
+
+test: install
+	@go test $(GOFLAGS) ./...
+
+bench: install
+	@go test -run=NONE -bench=. $(GOFLAGS) ./...
+
+clean:
+	@go clean $(GOFLAGS) -i ./...
 
 ## EOF
