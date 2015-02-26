@@ -4,6 +4,7 @@
 /*
  * include our own clang-c/Index.h.
  * It should be exactly the same than the upstream one, except that:
+ *  - CXComment
  *  - CXCursor
  *  - CXIdxLoc
  *  - CXSourceLocation
