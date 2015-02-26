@@ -1,15 +1,13 @@
 package clang
 
 // #include <stdlib.h>
-// #include "clang-c/Index.h"
 // #include "go-clang.h"
-//
 import "C"
-import
+import (
+	"unsafe"
+)
 
 // A single translation unit, which resides in an index
-"unsafe"
-
 type TranslationUnit struct {
 	c C.CXTranslationUnit
 }

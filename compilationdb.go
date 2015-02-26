@@ -1,9 +1,8 @@
 package clang
 
 // #include <stdlib.h>
-// #include "clang-c/Index.h"
-// #include "clang-c/CXCompilationDatabase.h"
 // #include "go-clang.h"
+// #include "clang-c/CXCompilationDatabase.h"
 //
 import "C"
 

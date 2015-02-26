@@ -1,12 +1,7 @@
 package clang
 
 // #include <stdlib.h>
-// #include "clang-c/Index.h"
 // #include "go-clang.h"
-// inline static
-// CXCursor _go_clang_ocursor_at(CXCursor *c, int idx) {
-//   return c[idx];
-// }
 import "C"
 
 import (

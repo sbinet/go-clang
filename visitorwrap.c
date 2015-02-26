@@ -2,7 +2,6 @@
  */
 
 #include "_cgo_export.h"
-#include "clang-c/Index.h"
 #include "go-clang.h"
 
 unsigned

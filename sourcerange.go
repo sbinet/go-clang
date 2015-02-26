@@ -1,9 +1,7 @@
 package clang
 
 // #include <stdlib.h>
-// #include "clang-c/Index.h"
 // #include "go-clang.h"
-//
 import "C"
 
 // SourceRange identifies a half-open character range in the source code.

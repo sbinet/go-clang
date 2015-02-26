@@ -1,7 +1,7 @@
 package clang
 
 // #include <stdlib.h>
-// #include "clang-c/Index.h"
+// #include "go-clang.h"
 import "C"
 import (
 //"unsafe"
