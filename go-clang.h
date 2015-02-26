@@ -8,6 +8,7 @@
  *  - CXIdxLoc
  *  - CXSourceLocation
  *  - CXSourceRange
+ *  - CXString
  *  - CXTUResourceUsage
  *  - CXToken
  *  - CXType
@@ -15,7 +16,7 @@
  * Not hiding these fields confuses the Go GC during garbage collection and pointer scanning,
  * making it think the heap/stack has been somehow corrupted.
  */
-#include "clang-c-index.h"
+#include "clang-c/Index.h"
 
 inline static
 CXCursor _go_clang_ocursor_at(CXCursor *c, int idx) {
