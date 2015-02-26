@@ -794,12 +794,19 @@ type CursorVisitor func(cursor, parent Cursor) (status ChildVisitResult)
  * prematurely by the visitor returning \c CXChildVisit_Break.
  */
 func (c Cursor) Visit(visitor CursorVisitor) bool {
+	forceEscapeVisitor = &visitor
 	o := C._go_clang_visit_children(c.c, unsafe.Pointer(&visitor))
 	if o != C.uint(0) {
 		return false
 	}
 	return true
 }
+
+// forceEscapeVisitor is write-only: to force compiler to escape the address
+// (else the address can become stale if the goroutine stack needs to grow
+// and is forced to move)
+// Explained by rsc in https://golang.org/issue/9125
+var forceEscapeVisitor *CursorVisitor
 
 //export GoClangCursorVisitor
 func GoClangCursorVisitor(cursor, parent C.CXCursor, cfct unsafe.Pointer) (status ChildVisitResult) {
