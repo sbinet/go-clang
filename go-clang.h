@@ -1,6 +1,15 @@
 #ifndef _GO_CLANG
 #define _GO_CLANG 1
 
+/*
+ * include our own clang-c/Index.h.
+ * It should be exactly the same than the upstream one, except that:
+ *  - CXCursor
+ *  - CXType
+ * have been modified to hide the 'void *field[x]' fields from the Go GC.
+ * Not hiding these fields confuses the Go GC during garbage collection and pointer scanning,
+ * making it think the heap/stack has been somehow corrupted.
+ */
 #include "clang-c-index.h"
 
 inline static
