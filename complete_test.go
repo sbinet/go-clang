@@ -16,7 +16,8 @@ func TestCompleteAt(t *testing.T) {
 	}
 	defer tu.Dispose()
 
-	res := tu.CompleteAt("visitorwrap.c", 11, 16, nil, 0)
+	const lineno = 10 // ie: call to clang_visitChildren
+	res := tu.CompleteAt("visitorwrap.c", lineno, 16, nil, 0)
 	if !res.IsValid() {
 		t.Fatal("CompleteResults are not valid")
 	}
