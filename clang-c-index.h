@@ -361,7 +361,7 @@ CINDEX_LINKAGE CXFile clang_getFile(CXTranslationUnit tu,
  * to map a source location to a particular file, line, and column.
  */
 typedef struct {
-  const void *ptr_data[2];
+  uintptr_t ptr_data[2];
   unsigned int_data;
 } CXSourceLocation;
 
@@ -372,7 +372,7 @@ typedef struct {
  * starting and end locations from a source range, respectively.
  */
 typedef struct {
-  const void *ptr_data[2];
+  uintptr_t ptr_data[2];
   unsigned begin_int_data;
   unsigned end_int_data;
 } CXSourceRange;
@@ -1491,7 +1491,7 @@ typedef struct CXTUResourceUsageEntry {
   */
 typedef struct CXTUResourceUsage {
   /* \brief Private data member, used for queries. */
-  void *data;
+  uintptr_t data;
 
   /* \brief The number of entries in the 'entries' array. */
   unsigned numEntries;
@@ -3893,7 +3893,7 @@ typedef enum CXTokenKind {
  */
 typedef struct {
   unsigned int_data[4];
-  void *ptr_data;
+  uintptr_t ptr_data;
 } CXToken;
 
 /**
@@ -4856,7 +4856,7 @@ enum CXVisitorResult {
 };
 
 typedef struct {
-  void *context;
+  uintptr_t context;
   enum CXVisitorResult (*visit)(void *context, CXCursor, CXSourceRange);
 } CXCursorAndRangeVisitor;
 
@@ -4953,7 +4953,7 @@ typedef void *CXIdxClientASTFile;
  * \brief Source location passed to index callbacks.
  */
 typedef struct {
-  void *ptr_data[2];
+  uintptr_t ptr_data[2];
   unsigned int_data;
 } CXIdxLoc;
 
