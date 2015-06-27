@@ -1,7 +1,7 @@
 package clang
 
 // #cgo LDFLAGS: -lclang
-// #cgo linux CFLAGS: -I.
+// #cgo CFLAGS: -I.
 import "C"
 
 //EOF
