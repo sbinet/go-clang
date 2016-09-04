@@ -4,6 +4,7 @@ package clang
 // #include "go-clang.h"
 import "C"
 import (
+	"sync"
 	"unsafe"
 )
 
@@ -795,11 +796,47 @@ type CursorVisitor func(cursor, parent Cursor) (status ChildVisitResult)
  */
 func (c Cursor) Visit(visitor CursorVisitor) bool {
 	forceEscapeVisitor = &visitor
-	o := C._go_clang_visit_children(c.c, unsafe.Pointer(&visitor))
+	id := visitorCallbacks.add(visitor)
+	defer visitorCallbacks.remove(id)
+
+	o := C._go_clang_visit_children(c.c, C.uintptr_t(id))
 	if o != C.uint(0) {
 		return false
 	}
 	return true
+}
+
+type visitorCallbackRegistry struct {
+	lock       sync.Mutex
+	callbacks  map[uintptr]CursorVisitor
+	generation uintptr
+}
+
+var visitorCallbacks = visitorCallbackRegistry{
+	callbacks: map[uintptr]CursorVisitor{},
+}
+
+func (r *visitorCallbackRegistry) add(cb CursorVisitor) uintptr {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+
+	r.generation++
+	r.callbacks[r.generation] = cb
+	return r.generation
+}
+
+func (r *visitorCallbackRegistry) remove(id uintptr) {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+
+	delete(r.callbacks, id)
+}
+
+func (r *visitorCallbackRegistry) get(id uintptr) CursorVisitor {
+	r.lock.Lock()
+	defer r.lock.Unlock()
+
+	return r.callbacks[id]
 }
 
 // forceEscapeVisitor is write-only: to force compiler to escape the address
@@ -809,10 +846,10 @@ func (c Cursor) Visit(visitor CursorVisitor) bool {
 var forceEscapeVisitor *CursorVisitor
 
 //export GoClangCursorVisitor
-func GoClangCursorVisitor(cursor, parent C.CXCursor, cfct unsafe.Pointer) (status ChildVisitResult) {
-	fct := *(*CursorVisitor)(cfct)
-	o := fct(Cursor{cursor}, Cursor{parent})
-	return o
+func GoClangCursorVisitor(cursor, parent C.CXCursor, callback_id unsafe.Pointer) (status ChildVisitResult) {
+	id := uintptr(callback_id)
+	cb := visitorCallbacks.get(id)
+	return cb(Cursor{cursor}, Cursor{parent})
 }
 
 /**
