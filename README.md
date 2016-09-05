@@ -7,8 +7,12 @@ go-clang
 
 Naive Go bindings to the C-API of ``CLang``.
 
+## WARNING - DEPRECATED
+
 **WARNING:** This repository is _**DEPRECATED**_.
 Please use instead one of the `clang` bindings under [github.com/go-clang](https://github.com/go-clang).
+
+---
 
 Installation
 ------------
