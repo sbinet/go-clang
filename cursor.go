@@ -820,7 +820,9 @@ func (r *visitorCallbackRegistry) add(cb CursorVisitor) uintptr {
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
-	r.generation++
+	for r.callbacks[r.generation] != nil {
+		r.generation++
+	}
 	r.callbacks[r.generation] = cb
 	return r.generation
 }
